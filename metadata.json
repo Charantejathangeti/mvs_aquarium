@@ -1,0 +1,7 @@
+{
+  "name": "MVS Aqua Store & Admin",
+  "description": "A premium e-commerce platform with a refined dark aqua theme, featuring a full shop, cart system, WhatsApp integration, and a comprehensive admin dashboard for product and invoice management.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
