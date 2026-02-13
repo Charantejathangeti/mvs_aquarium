@@ -8,129 +8,37 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
       body {
         font-family: 'Inter', sans-serif;
         background-color: #ffffff;
-        color: #0f172a;
+        color: #000000;
         scroll-behavior: smooth;
         margin: 0;
-        overflow-x: hidden;
       }
       
-      @keyframes float {
-        0%, 100% { transform: translateY(0) translateX(0); }
-        33% { transform: translateY(-30px) translateX(20px); }
-        66% { transform: translateY(20px) translateX(-10px); }
-      }
-
-      @keyframes bubble-organic {
-        0% { transform: translateY(110vh) translateX(0) scale(0.5); opacity: 0; }
-        25% { transform: translateY(80vh) translateX(15px) scale(0.8); opacity: 0.4; }
-        50% { transform: translateY(50vh) translateX(-15px) scale(1); opacity: 0.2; }
-        75% { transform: translateY(20vh) translateX(10px) scale(0.9); opacity: 0.3; }
-        100% { transform: translateY(-10vh) translateX(0) scale(1.2); opacity: 0; }
-      }
-
-      @keyframes swim-standard {
-        0% { transform: translateX(-20vw) translateY(0) rotate(0deg); opacity: 0; }
-        5% { opacity: 0.6; }
-        50% { transform: translateX(50vw) translateY(-50px) rotate(5deg); }
-        95% { opacity: 0.6; }
-        100% { transform: translateX(120vw) translateY(0) rotate(0deg); opacity: 0; }
-      }
-
-      @keyframes swim-zigzag {
-        0% { transform: translateX(-20vw) translateY(0) scaleX(1); opacity: 0; }
-        10% { opacity: 0.8; }
-        25% { transform: translateX(15vw) translateY(40px) scaleX(1); }
-        40% { transform: translateX(30vw) translateY(-40px) scaleX(1); }
-        60% { transform: translateX(60vw) translateY(30px) scaleX(1); }
-        80% { transform: translateX(90vw) translateY(-20px) scaleX(1); }
-        100% { transform: translateX(120vw) translateY(0) scaleX(1); opacity: 0; }
-      }
-
-      @keyframes swim-dash {
-        0% { transform: translateX(-20vw) scale(0.8); opacity: 0; }
-        5% { opacity: 1; }
-        15% { transform: translateX(10vw) scale(1.1); }
-        18% { transform: translateX(12vw) scale(1); }
-        45% { transform: translateX(60vw) scale(1.1); }
-        48% { transform: translateX(63vw) scale(1); }
-        95% { opacity: 1; }
-        100% { transform: translateX(120vw) scale(0.8); opacity: 0; }
-      }
-
-      @keyframes sway-seaweed {
-        0%, 100% { transform: rotate(-5deg) skewX(-2deg); }
-        50% { transform: rotate(5deg) skewX(2deg); }
-      }
-
-      @keyframes pulse-vibrant {
-        0%, 100% { filter: drop-shadow(0 0 2px currentColor); transform: scale(1); }
-        50% { filter: drop-shadow(0 0 10px currentColor); transform: scale(1.1); }
-      }
-      
-      .bg-mesh-aqua {
-        background: radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);
-      }
-
-      .animate-float {
-        animation: float 20s infinite ease-in-out;
-      }
-
-      .animate-bubble-organic {
-        animation: bubble-organic infinite linear;
-        will-change: transform, opacity;
-      }
-
-      .animate-swim-standard {
-        animation: swim-standard infinite linear;
-        will-change: transform;
-      }
-
-      .animate-swim-zigzag {
-        animation: swim-zigzag infinite ease-in-out;
-        will-change: transform;
-      }
-
-      .animate-swim-dash {
-        animation: swim-dash infinite cubic-bezier(0.4, 0, 0.2, 1);
-        will-change: transform;
-      }
-
-      .animate-sway {
-        animation: sway-seaweed 6s infinite ease-in-out;
-        transform-origin: bottom center;
-      }
-
-      .animate-pulse-vibrant {
-        animation: pulse-vibrant 3s infinite ease-in-out;
-      }
-
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #f8fafc;
+        background: #f1f1f1;
       }
       ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 10px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #0ea5e9;
-      }
-
-      @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+        background: #0284c7;
       }
       
-      .animate-fade-in-up {
-        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
       }
+      .animate-fade-in {
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+      
+      /* Reset all large rounded corners to professional rectangles */
+      .rounded-rect { border-radius: 4px; }
+      .rounded-rect-lg { border-radius: 8px; }
     </style>
   <script type="importmap">
 {

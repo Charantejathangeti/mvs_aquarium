@@ -1,98 +1,129 @@
 
 import React from 'react';
-import { Shield, Users, Globe, Award, Truck, ShieldCheck, RefreshCw, Anchor } from 'lucide-react';
+import { Shield, Users, Globe, Award, Truck, ShieldCheck, RefreshCw, Anchor, Fish, FlaskConical, Map, History } from 'lucide-react';
 import { BUSINESS_INFO } from '../constants';
 
 const About: React.FC = () => {
   return (
-    <div className="space-y-24 py-20 px-4">
-      <section className="max-w-4xl mx-auto text-center">
-        <h1 className="text-5xl font-extrabold text-white mb-8">Pioneering Aquatic Excellence</h1>
-        <p className="text-xl text-slate-400 leading-relaxed">
-          MVS Aqua is dedicated to providing high-quality aquatic livestock and products. 
-          Operating from the heart of Tirupati, we ensure your aquatic friends reach you healthy and safe.
-        </p>
-      </section>
-
-      <section className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <div className="rounded-[3rem] overflow-hidden border border-slate-800 shadow-2xl h-[500px] relative group">
-          <img src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&q=80&w=800" alt="Exotic Betta" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-60"></div>
-          <div className="absolute bottom-10 left-10">
-            <span className="px-4 py-2 bg-[#38bdf8] text-[#020617] font-black rounded-xl uppercase tracking-widest text-xs">Exotic Stock</span>
-          </div>
+    <div className="bg-white pb-24">
+      {/* Header Banner */}
+      <section className="bg-slate-900 py-24 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+           <img src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&q=80&w=1920" className="w-full h-full object-cover" alt="Banner" />
         </div>
-        <div className="space-y-8">
-          <h2 className="text-4xl font-bold text-white">Trust, Transparency, Quality</h2>
-          <p className="text-lg text-slate-400 leading-relaxed">
-            Every order at MVS Aqua is handled with professional care. We specialize in live fish shipping across T.S. and A.P.
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <div className="inline-block px-4 py-1 border border-sky-500/30 bg-sky-500/10 text-sky-400 rounded-sm mb-6 text-[10px] font-black uppercase tracking-widest">Est. 2015</div>
+          <h1 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter">Aquatic Legacy.</h1>
+          <p className="text-base text-slate-400 leading-relaxed font-medium max-w-2xl mx-auto uppercase tracking-wide">
+            MVS Aqua is a premier biological fulfillment center based in Tirupati, 
+            bridging the gap between ethical breeders and discerning aquarium hobbyists.
           </p>
-          
-          <div className="space-y-4 p-8 bg-[#0b1220] border border-slate-800 rounded-[2rem]">
-             <div className="flex items-center space-x-4">
-                <div className="p-3 bg-emerald-500/10 text-emerald-500 rounded-xl">
-                   <Truck size={24} />
-                </div>
-                <div>
-                   <p className="text-white font-bold">Monday Dispatch Policy</p>
-                   <p className="text-slate-500 text-sm leading-relaxed">Every MONDAY only we dispatch parcels❗️ Orders placed throughout the week are prepared and sent on Monday to ensure safe transit.</p>
-                </div>
-             </div>
-             <div className="flex items-center space-x-4">
-                <div className="p-3 bg-amber-500/10 text-amber-500 rounded-xl">
-                   <ShieldCheck size={24} />
-                </div>
-                <div>
-                   <p className="text-white font-bold">Prepaid Orders Only</p>
-                   <p className="text-slate-500 text-sm leading-relaxed">No Cash on delivery (COD). We accept payments via Google Pay, PhonePe, and Paytm.</p>
-                </div>
-             </div>
+        </div>
+      </section>
+
+      {/* Main Philosophy */}
+      <section className="max-w-7xl mx-auto px-4 py-24 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <div className="relative group">
+          <div className="absolute -inset-4 bg-sky-500/5 group-hover:bg-sky-500/10 transition-all rounded-sm -z-10" />
+          <img src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&q=80&w=1200" alt="Exotic Betta" className="w-full aspect-square object-cover rounded-sm shadow-2xl" />
+          <div className="absolute -bottom-8 -right-8 bg-white border border-slate-200 p-8 shadow-xl max-w-[240px]">
+             <FlaskConical size={32} className="text-sky-600 mb-4" />
+             <p className="text-[11px] font-bold text-slate-700 leading-relaxed italic">"Our water parameters are calibrated daily to simulate natural biotypes for zero-stress acclimation."</p>
+          </div>
+        </div>
+        
+        <div className="space-y-10">
+          <div>
+            <h2 className="text-4xl font-black text-black uppercase tracking-tighter mb-6">Scientific Rearing.</h2>
+            <p className="text-sm text-slate-500 leading-relaxed font-medium">
+              We operate under a simple but rigorous philosophy: livestock health is paramount. 
+              Our Tirupati facility isn't just a warehouse—it's a sophisticated biological holding center 
+              where every species from Bettas to Discus undergoes a systematic quarantine protocol.
+            </p>
           </div>
           
-          <div className="grid grid-cols-2 gap-8 pt-4">
-            <div className="space-y-2">
-              <p className="text-3xl font-extrabold text-[#38bdf8]">T.S/A.P</p>
-              <p className="text-slate-500 font-bold uppercase text-[10px] tracking-widest">Main Service Area</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div className="space-y-3">
+               <div className="flex items-center gap-3">
+                  <ShieldCheck size={18} className="text-sky-600" />
+                  <h4 className="text-xs font-black text-black uppercase tracking-widest">Quarantine Pro</h4>
+               </div>
+               <p className="text-[11px] text-slate-500 leading-relaxed">Minimum 14-day observation period before any species enters our public stocklist.</p>
             </div>
-            <div className="space-y-2">
-              <p className="text-3xl font-extrabold text-[#38bdf8]">₹80/kg</p>
-              <p className="text-slate-500 font-bold uppercase text-[10px] tracking-widest">Shipping Rate</p>
+            <div className="space-y-3">
+               <div className="flex items-center gap-3">
+                  <Map size={18} className="text-sky-600" />
+                  <h4 className="text-xs font-black text-black uppercase tracking-widest">Regional Focus</h4>
+               </div>
+               <p className="text-[11px] text-slate-500 leading-relaxed">Specialized logistics for Tamil Nadu, Telangana, and Andhra Pradesh for shorter transit times.</p>
             </div>
+          </div>
+
+          <div className="pt-8 border-t border-slate-100 flex items-center gap-6">
+             <div className="flex -space-x-3">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200 overflow-hidden shadow-sm">
+                    <img src={`https://i.pravatar.cc/100?u=mvs${i}`} alt="Team" />
+                  </div>
+                ))}
+             </div>
+             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Join 5000+ satisfied hobbyists</p>
           </div>
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-10 bg-[#0b1220] border border-slate-800 rounded-[2.5rem] group hover:border-[#38bdf8]/50 transition-all">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-[1.5rem] bg-[#38bdf8]/10 text-[#38bdf8] mb-6 border border-[#38bdf8]/20 group-hover:scale-110 transition-transform">
-                <RefreshCw size={28} />
-              </div>
-              <h4 className="text-xl font-bold text-white mb-4">Refund Policy</h4>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                In case of any transit damages, a <span className="text-white font-bold">45% refund</span> of the amount will be issued. No replacement accepted without an unboxing video 💯.
-              </p>
-            </div>
-            <div className="text-center p-10 bg-[#0b1220] border border-slate-800 rounded-[2.5rem] group hover:border-[#38bdf8]/50 transition-all">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-[1.5rem] bg-[#38bdf8]/10 text-[#38bdf8] mb-6 border border-[#38bdf8]/20 group-hover:scale-110 transition-transform">
-                <Anchor size={28} />
-              </div>
-              <h4 className="text-xl font-bold text-white mb-4">Our Base</h4>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                {BUSINESS_INFO.address}<br/>
-                Proudly serving the aquarium community since 2015.
-              </p>
-            </div>
-            <div className="text-center p-10 bg-[#0b1220] border border-slate-800 rounded-[2.5rem] group hover:border-[#38bdf8]/50 transition-all">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-[1.5rem] bg-[#38bdf8]/10 text-[#38bdf8] mb-6 border border-[#38bdf8]/20 group-hover:scale-110 transition-transform">
-                <Users size={28} />
-              </div>
-              <h4 className="text-xl font-bold text-white mb-4">Community</h4>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Another time we are waiting for your orders and reunite with us. Place more orders and keep supporting us.🤟🏻❤️‍🩹
-              </p>
-            </div>
+      {/* Pillars Section */}
+      <section className="bg-slate-50 py-24">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-black text-black uppercase tracking-tighter mb-2">Our Core Pillars</h2>
+            <div className="w-20 h-1 bg-sky-500 mx-auto" />
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+             <div className="bg-white p-10 border border-slate-200 rounded-sm hover:translate-y-[-4px] transition-all">
+                <History size={24} className="text-sky-600 mb-6" />
+                <h4 className="text-xs font-black text-black uppercase tracking-widest mb-4">Precision Logistics</h4>
+                <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                  Dispatching exclusively on Mondays allows us to avoid the "weekend lag" where parcels sit in hot courier hubs. Every minute matters in live transit.
+                </p>
+             </div>
+             <div className="bg-white p-10 border border-slate-200 rounded-sm hover:translate-y-[-4px] transition-all">
+                <RefreshCw size={24} className="text-sky-600 mb-6" />
+                <h4 className="text-xs font-black text-black uppercase tracking-widest mb-4">Risk Mitigation</h4>
+                <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                  With our 45% DOA refund policy, we stand by our packaging. We share the inherent risks of livestock shipping with our customers.
+                </p>
+             </div>
+             <div className="bg-white p-10 border border-slate-200 rounded-sm hover:translate-y-[-4px] transition-all">
+                <Users size={24} className="text-sky-600 mb-6" />
+                <h4 className="text-xs font-black text-black uppercase tracking-widest mb-4">Support Ecosystem</h4>
+                <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
+                  We don't just sell fish. We provide setup advice, feeding protocols, and disease management support to ensure your specimens thrive.
+                </p>
+             </div>
+          </div>
         </div>
+      </section>
+
+      {/* Address & Trust */}
+      <section className="max-w-4xl mx-auto px-4 py-24 text-center">
+         <div className="w-16 h-16 bg-sky-50 text-sky-600 rounded-full flex items-center justify-center mx-auto mb-8 border border-sky-100">
+            <Anchor size={24} />
+         </div>
+         <h3 className="text-2xl font-black text-black uppercase tracking-tight mb-4">Rooted in Tirupati.</h3>
+         <p className="text-sm text-slate-500 leading-relaxed font-medium mb-10">
+           Located at {BUSINESS_INFO.address}, MVS Aqua continues to serve as the gateway 
+           to high-quality aquatics for the southern region. We invite you to be part of our growing aquatic community.
+         </p>
+         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="px-6 py-3 bg-white border border-slate-200 rounded-sm text-[10px] font-black uppercase tracking-widest text-slate-400">
+               VAT Registered Entity
+            </div>
+            <div className="px-6 py-3 bg-white border border-slate-200 rounded-sm text-[10px] font-black uppercase tracking-widest text-slate-400">
+               Verified Export Grade
+            </div>
+         </div>
       </section>
     </div>
   );

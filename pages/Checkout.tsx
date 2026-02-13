@@ -97,7 +97,7 @@ _Payment is PREPAID ONLY via GPay/PhonePe. Please send screenshot after payment 
         <form onSubmit={handlePlaceOrder} className="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24 items-start">
           
           {/* Left: Billing Details */}
-          <div className="bg-white p-12 lg:p-16 rounded-[4rem] shadow-2xl shadow-slate-200/50 space-y-16">
+          <div className="bg-white p-12 lg:p-16 rounded-[4rem] shadow-2xl shadow-slate-200/50 space-y-16 animate-fade-in">
             <div>
               <Link to="/cart" className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-cyan-600 flex items-center gap-2 mb-10 group transition-all">
                 <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
@@ -148,7 +148,7 @@ _Payment is PREPAID ONLY via GPay/PhonePe. Please send screenshot after payment 
 
           {/* Right: Order Summary Sticky Card */}
           <div className="lg:sticky lg:top-28">
-            <div className="bg-slate-900 border border-slate-800 rounded-[4rem] p-14 text-white shadow-3xl shadow-slate-900/40">
+            <div className="bg-slate-900 border border-slate-800 rounded-[4rem] p-14 text-white shadow-3xl shadow-slate-900/40 animate-fade-in" style={{ animationDelay: '0.1s' }}>
               <h3 className="text-3xl font-black mb-12 tracking-tighter uppercase">Order Summary</h3>
               
               <div className="divide-y divide-slate-800">
@@ -200,7 +200,7 @@ _Payment is PREPAID ONLY via GPay/PhonePe. Please send screenshot after payment 
                 ) : (
                   <>
                     <MessageCircle size={26} />
-                    <span className="text-xs uppercase tracking-[0.3em]">Authorize on WhatsApp</span>
+                    <span className="text-xs uppercase tracking-[0.3em]">Order via WhatsApp</span>
                   </>
                 )}
               </button>

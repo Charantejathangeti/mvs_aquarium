@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, MessageCircle, Send, CheckCircle2, QrCode } from 'lucide-react';
+import { Mail, Phone, MapPin, MessageCircle, Send, CheckCircle2, QrCode, Instagram, Youtube } from 'lucide-react';
 import { WHATSAPP_NUMBER, BUSINESS_INFO } from '../constants';
 
 const Contact: React.FC = () => {
@@ -12,41 +12,61 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-20">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-        <div>
-          <h1 className="text-5xl font-extrabold text-white mb-6">Get in Touch</h1>
-          <p className="text-xl text-slate-400 mb-12">
-            MVS Aqua is here to help with your aquarium needs. Reach out to us for orders, support, or partnership.
-          </p>
+    <div className="max-w-7xl mx-auto px-4 py-16">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div className="space-y-10">
+          <div>
+            <h1 className="text-4xl font-black text-black uppercase tracking-tighter mb-4">Connect.</h1>
+            <p className="text-sm text-slate-600 font-medium leading-relaxed max-w-md">
+              Reach out for livestock inquiries, logistics support, or professional consultations.
+            </p>
+          </div>
 
-          <div className="space-y-8 mb-12">
-            <div className="flex items-start space-x-6">
-              <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-[#38bdf8] shrink-0">
-                <Mail size={24} />
+          <div className="space-y-6">
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-slate-50 border border-slate-200 text-sky-600 rounded-sm">
+                <Mail size={18} />
               </div>
               <div>
-                <h4 className="text-white font-bold mb-1">Email Us</h4>
-                <p className="text-slate-400">{BUSINESS_INFO.email}</p>
+                <h4 className="text-[10px] font-black text-black uppercase tracking-widest">Email Support</h4>
+                <p className="text-xs text-slate-700 font-bold">{BUSINESS_INFO.email}</p>
               </div>
             </div>
-            <div className="flex items-start space-x-6">
-              <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-[#38bdf8] shrink-0">
-                <Phone size={24} />
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-slate-50 border border-slate-200 text-emerald-600 rounded-sm">
+                <MessageCircle size={18} />
               </div>
               <div>
-                <h4 className="text-white font-bold mb-1">Call Us</h4>
-                <p className="text-slate-400">{BUSINESS_INFO.phone}</p>
-                <p className="text-slate-500 text-sm">Mon-Sat, 10am - 8pm IST</p>
+                <h4 className="text-[10px] font-black text-black uppercase tracking-widest">WhatsApp Support</h4>
+                <p className="text-xs text-slate-700 font-bold">+91 {WHATSAPP_NUMBER.slice(2, 7)} {WHATSAPP_NUMBER.slice(7)}</p>
               </div>
             </div>
-            <div className="flex items-start space-x-6">
-              <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-[#38bdf8] shrink-0">
-                <MapPin size={24} />
+            <div className="flex items-start space-x-4">
+              <div className="p-2 bg-slate-50 border border-slate-200 text-black rounded-sm">
+                <MapPin size={18} />
               </div>
               <div>
-                <h4 className="text-white font-bold mb-1">MVS Aqua HQ</h4>
-                <p className="text-slate-400 leading-relaxed max-w-xs">{BUSINESS_INFO.address}</p>
+                <h4 className="text-[10px] font-black text-black uppercase tracking-widest">Location</h4>
+                <p className="text-xs text-slate-700 font-bold max-w-xs">{BUSINESS_INFO.address}</p>
+              </div>
+            </div>
+            
+            {/* Social Media Section */}
+            <div className="pt-6 border-t border-slate-100 space-y-4">
+              <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Brand Channels</h4>
+              <div className="flex flex-col gap-3">
+                <a href={BUSINESS_INFO.socials.instagram} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 group">
+                  <div className="p-2 bg-pink-50 border border-pink-100 text-[#E4405F] group-hover:bg-[#E4405F] group-hover:text-white transition-all rounded-sm">
+                    <Instagram size={16} />
+                  </div>
+                  <span className="text-xs font-black text-slate-700 group-hover:text-black transition-colors uppercase tracking-widest">mvs_aqua</span>
+                </a>
+                <a href={BUSINESS_INFO.socials.youtube} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 group">
+                  <div className="p-2 bg-red-50 border border-red-100 text-[#FF0000] group-hover:bg-[#FF0000] group-hover:text-white transition-all rounded-sm">
+                    <Youtube size={16} />
+                  </div>
+                  <span className="text-xs font-black text-slate-700 group-hover:text-black transition-colors uppercase tracking-widest">MVS Aqua</span>
+                </a>
               </div>
             </div>
           </div>
@@ -54,53 +74,53 @@ const Contact: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-4">
              <a 
                 href={`https://wa.me/${WHATSAPP_NUMBER}`}
-                className="inline-flex items-center space-x-3 px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl transition-all shadow-lg shadow-emerald-600/20"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest rounded-sm hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200/50"
               >
-                <MessageCircle size={22} />
-                <span>Chat via WhatsApp</span>
+                <MessageCircle size={18} />
+                <span>Open WhatsApp Dispatch</span>
               </a>
-              <div className="px-6 py-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-center space-x-3 text-slate-400">
-                 <QrCode size={24} />
-                 <span className="text-xs font-bold uppercase tracking-widest">Prepaid Support Only</span>
+              <div className="px-6 py-4 bg-slate-50 border border-slate-200 rounded-sm flex items-center justify-center space-x-3 text-slate-500">
+                 <QrCode size={18} />
+                 <span className="text-[9px] font-black uppercase tracking-widest">Prepaid Only Verification</span>
               </div>
           </div>
         </div>
 
-        <div className="bg-[#0b1220] border border-slate-800 rounded-[2.5rem] p-10 shadow-2xl">
+        <div className="bg-white border border-slate-200 rounded-sm p-8 shadow-sm">
           {submitted ? (
-            <div className="h-full flex flex-col items-center justify-center text-center space-y-6">
-              <div className="w-20 h-20 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center border border-emerald-500/20">
-                <CheckCircle2 size={40} />
-              </div>
-              <h3 className="text-2xl font-bold text-white">Inquiry Received</h3>
-              <p className="text-slate-400 leading-relaxed">
-                Thank you for reaching out. For faster response, we recommend contacting us on WhatsApp.
+            <div className="h-full flex flex-col items-center justify-center text-center space-y-6 py-12">
+              <CheckCircle2 size={40} className="text-emerald-600" />
+              <h3 className="text-sm font-black text-black uppercase tracking-widest">Request Logged</h3>
+              <p className="text-[10px] text-slate-600 font-medium">
+                Transmission successful. For immediate response, use the WhatsApp link.
               </p>
-              <button onClick={() => setSubmitted(false)} className="text-[#38bdf8] font-bold hover:underline">New Message</button>
+              <button onClick={() => setSubmitted(false)} className="text-[9px] font-black text-sky-600 uppercase underline underline-offset-4">New Inquiry</button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">First Name</label>
-                  <input required className="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#38bdf8]/50" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">First Name</label>
+                  <input required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-sm text-xs font-bold text-black focus:border-black outline-none" />
                 </div>
-                <div>
-                  <label className="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Last Name</label>
-                  <input required className="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#38bdf8]/50" />
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Last Name</label>
+                  <input required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-sm text-xs font-bold text-black focus:border-black outline-none" />
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Email Address</label>
-                <input required type="email" className="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#38bdf8]/50" />
+              <div className="space-y-1">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Email Address</label>
+                <input required type="email" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-sm text-xs font-bold text-black focus:border-black outline-none" />
               </div>
-              <div>
-                <label className="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2">How can we help?</label>
-                <textarea required rows={4} className="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-[#38bdf8]/50 resize-none" placeholder="Enter your query here..." />
+              <div className="space-y-1">
+                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Inquiry Message</label>
+                <textarea required rows={4} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-sm text-xs font-bold text-black focus:border-black outline-none resize-none" placeholder="Describe your request..." />
               </div>
-              <button type="submit" className="w-full py-5 bg-[#38bdf8] hover:bg-[#0ea5e9] text-[#020617] font-extrabold rounded-2xl flex items-center justify-center space-x-2 transition-all shadow-xl shadow-[#38bdf8]/20">
-                <span>Send message</span>
-                <Send size={18} />
+              <button type="submit" className="w-full py-4 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-sm hover:bg-slate-800 transition-all flex items-center justify-center gap-2">
+                <span>Submit Transmission</span>
+                <Send size={14} />
               </button>
             </form>
           )}
