@@ -3,8 +3,8 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { 
   LayoutDashboard, Trash2, Search, LogOut, 
-  X, PlusCircle, Image as ImageIcon, Camera, Edit2Icon, 
-  TrashIcon, Box, Plus, Download, FileText, RefreshCw, 
+  X, PlusCircle, Image as ImageIcon, Camera, Edit2, 
+  Trash, Box, Plus, Download, FileText, RefreshCw, 
   AlertCircle, CheckCircle, PackageCheck, Zap, Globe, ExternalLink,
   Truck, ClipboardList, CreditCard, UserCheck, Settings, Printer, Phone, MapPin, Menu, Info, Layers,
   ChevronRight, ArrowRight
@@ -130,23 +130,23 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
   return (
     <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden">
       {showSuccessToast && (
-        <div className="fixed top-6 right-6 z-[100] bg-emerald-600 text-white px-5 py-3 flex items-center gap-3 rounded-md shadow-2xl animate-fade-in">
-          <CheckCircle className="text-white" size={18} />
-          <span className="font-bold text-sm">Inventory Synced Successfully</span>
+        <div className="fixed top-8 right-8 z-[100] bg-emerald-600 text-white px-6 py-4 flex items-center gap-3 rounded-md shadow-2xl animate-fade-in">
+          <CheckCircle className="text-white" size={20} />
+          <span className="font-bold text-sm">Inventory Successfully Updated</span>
         </div>
       )}
 
-      {/* Sidebar - Modern Professional */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-56 bg-slate-900 text-slate-300 transform transition-transform duration-300 md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="p-6 border-b border-white/10 flex items-center justify-between">
+      {/* Sidebar - Modern Design */}
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 transform transition-transform duration-300 md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="p-8 border-b border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-sky-500 text-white font-black flex items-center justify-center rounded-md text-sm shadow-lg">M</div>
-            <span className="font-bold text-white text-sm tracking-tight">Admin Panel</span>
+            <div className="w-9 h-9 bg-sky-600 text-white font-black flex items-center justify-center rounded-md text-base">M</div>
+            <span className="font-extrabold text-white text-lg tracking-tight">Admin Panel</span>
           </div>
-          <button onClick={() => setIsSidebarOpen(false)} className="md:hidden p-2 hover:bg-white/5 rounded-md"><X size={20}/></button>
+          <button onClick={() => setIsSidebarOpen(false)} className="md:hidden p-2"><X size={24}/></button>
         </div>
 
-        <nav className="p-3 space-y-2 mt-4">
+        <nav className="p-4 space-y-2 mt-6">
           {[
             { id: 'Dashboard', icon: LayoutDashboard },
             { id: 'Products', icon: Box },
@@ -156,33 +156,33 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
             <button
               key={tab.id}
               onClick={() => { setActiveTab(tab.id as any); setIsSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 font-bold rounded-md transition-all ${
+              className={`w-full flex items-center gap-4 px-5 py-4 font-bold rounded-md transition-all ${
                 activeTab === tab.id ? 'bg-sky-600 text-white shadow-lg' : 'hover:bg-white/5 hover:text-white'
               }`}
             >
-              <tab.icon size={18} />
-              <span className="text-[13px]">{tab.id}</span>
+              <tab.icon size={20} />
+              <span className="text-sm">{tab.id}</span>
             </button>
           ))}
         </nav>
 
-        <div className="absolute bottom-0 w-full p-3 border-t border-white/10">
-          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-red-400 hover:bg-red-400/5 font-bold rounded-md transition-all">
-            <LogOut size={18} />
-            <span className="text-[13px]">Logout</span>
+        <div className="absolute bottom-0 w-full p-4 border-t border-white/10">
+          <button onClick={handleLogout} className="w-full flex items-center gap-4 px-5 py-4 text-slate-400 hover:text-red-400 font-bold rounded-md transition-all">
+            <LogOut size={20} />
+            <span className="text-sm">Logout</span>
           </button>
         </div>
       </aside>
 
       {/* Main Container */}
       <main className="flex-grow flex flex-col min-w-0 h-screen overflow-hidden">
-        {/* Module Header Bar */}
-        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shrink-0 z-10 shadow-sm">
+        {/* Header Bar */}
+        <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-10 shrink-0 z-10 shadow-sm">
           <div className="flex items-center gap-4">
-            <button onClick={() => setIsSidebarOpen(true)} className="md:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-md transition-colors"><Menu size={22}/></button>
+            <button onClick={() => setIsSidebarOpen(true)} className="md:hidden p-2 text-slate-500"><Menu size={24}/></button>
             <div className="flex flex-col">
-              <span className="font-extrabold text-slate-900 text-xl md:text-2xl leading-tight">{activeTab}</span>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">MVS Aqua Store Management</span>
+              <span className="font-extrabold text-slate-900 text-2xl leading-none">{activeTab}</span>
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Store Management System</span>
             </div>
           </div>
           <div className="flex items-center gap-6">
@@ -193,61 +193,61 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
                     setProductForm({name:'', scientificName: '', category:CATEGORIES[0], price:0, weight:0, image:'', description:'', stock:0, careLevel: 'Easy', variations: []}); 
                     setIsProductModalOpen(true); 
                   }} 
-                  className="px-6 py-2 bg-slate-900 text-white font-bold rounded-md flex items-center gap-2 hover:bg-sky-600 transition-all text-xs shadow-md"
+                  className="px-6 py-3 bg-slate-900 text-white font-bold rounded-md flex items-center gap-2 hover:bg-sky-600 transition-all text-sm shadow-md"
                 >
-                  <Plus size={16} /> Add Product
+                  <Plus size={18} /> Add Product
                 </button>
              )}
              <div className="flex items-center gap-3 pl-6 border-l border-slate-200">
-               <div className={`w-2 h-2 rounded-full ${syncStatus === 'saving' ? 'bg-sky-500 animate-pulse' : 'bg-emerald-500'}`} />
-               <span className="text-slate-500 font-bold text-[11px] uppercase tracking-wider">{syncStatus === 'saving' ? 'Updating' : 'Online'}</span>
+               <div className={`w-2.5 h-2.5 rounded-full ${syncStatus === 'saving' ? 'bg-sky-500 animate-pulse' : 'bg-emerald-500'}`} />
+               <span className="text-slate-500 font-bold text-xs uppercase tracking-widest">{syncStatus === 'saving' ? 'Syncing...' : 'Connected'}</span>
              </div>
           </div>
         </header>
 
-        {/* Content Area */}
-        <div className="flex-grow overflow-y-auto p-6 md:p-8 bg-slate-50">
+        {/* Scrollable Content */}
+        <div className="flex-grow overflow-y-auto p-8 md:p-12 bg-slate-50">
           
           {activeTab === 'Dashboard' && (
-            <div className="space-y-6 max-w-6xl">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="space-y-8 max-w-6xl">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                 {[
-                  { label: 'Total Products', value: products.length, icon: Box, color: 'text-slate-900' },
-                  { label: 'Active Orders', value: stats.activeOrders, icon: Truck, color: 'text-sky-600' },
+                  { label: 'Total Inventory', value: products.length, icon: Box, color: 'text-slate-900' },
+                  { label: 'Active Shipments', value: stats.activeOrders, icon: Truck, color: 'text-sky-600' },
                   { label: 'Store Revenue', value: `₹${stats.revenue.toLocaleString()}`, icon: CreditCard, color: 'text-emerald-600' }
                 ].map((s, i) => (
-                  <div key={i} className="bg-white p-6 border border-slate-200 rounded-md shadow-sm flex items-center justify-between group hover:border-sky-500/20 transition-all">
+                  <div key={i} className="bg-white p-8 border border-slate-200 rounded-md shadow-sm flex items-center justify-between group hover:border-sky-500/30 transition-all">
                     <div className="space-y-1">
                        <p className="font-bold text-slate-400 text-xs uppercase tracking-wider">{s.label}</p>
-                       <h3 className={`text-2xl font-black ${s.color} leading-none`}>{s.value}</h3>
+                       <h3 className={`text-3xl font-black ${s.color} leading-none`}>{s.value}</h3>
                     </div>
-                    <div className="p-3 bg-slate-50 rounded-lg group-hover:bg-sky-50 transition-colors">
-                      <s.icon size={22} className="text-slate-300 group-hover:text-sky-500" />
+                    <div className="p-4 bg-slate-50 rounded-lg group-hover:bg-sky-50 transition-colors">
+                      <s.icon size={28} className="text-slate-200 group-hover:text-sky-500 transition-colors" />
                     </div>
                   </div>
                 ))}
               </div>
 
               <div className="bg-white border border-slate-200 rounded-md overflow-hidden shadow-sm">
-                 <div className="px-6 py-4 bg-slate-50/50 border-b border-slate-200 flex justify-between items-center">
-                    <h4 className="font-bold text-slate-600 text-xs uppercase tracking-wider">Recent Orders</h4>
-                    <RefreshCw size={14} className="text-slate-300 animate-spin-slow cursor-pointer hover:text-slate-500 transition-colors"/>
+                 <div className="px-8 py-5 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                    <h4 className="font-bold text-slate-600 text-xs uppercase tracking-widest">Recent Activity</h4>
+                    <RefreshCw size={16} className="text-slate-300 animate-spin-slow cursor-pointer hover:text-slate-500 transition-colors"/>
                  </div>
                  <div className="divide-y divide-slate-100">
                    {orders.slice(-6).reverse().map(o => (
-                     <div key={o.id} className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors">
+                     <div key={o.id} className="flex items-center justify-between px-8 py-5 hover:bg-slate-50 transition-colors">
                         <div className="flex items-center gap-4">
-                           <div className="w-10 h-10 bg-slate-100 text-slate-900 flex items-center justify-center rounded-md text-[10px] font-black border border-slate-200">#{o.id.slice(-3)}</div>
+                           <div className="w-10 h-10 bg-slate-100 text-slate-900 flex items-center justify-center rounded-md text-xs font-black border border-slate-200">#{o.id.slice(-3)}</div>
                            <div className="flex flex-col">
-                              <span className="font-bold text-slate-900 text-[13px]">{o.customerName}</span>
-                              <span className="text-[11px] font-medium text-slate-400">{new Date(o.date).toLocaleDateString('en-IN')}</span>
+                              <span className="font-bold text-slate-900 text-base">{o.customerName}</span>
+                              <span className="text-xs font-medium text-slate-400 mt-0.5">{new Date(o.date).toLocaleDateString()}</span>
                            </div>
                         </div>
-                        <div className="flex items-center gap-8">
-                           <span className="font-bold text-slate-900 text-sm">₹{o.total.toLocaleString()}</span>
-                           <span className={`text-[10px] font-bold px-3 py-1 rounded-full border ${
+                        <div className="flex items-center gap-10">
+                           <span className="font-bold text-slate-900 text-lg">₹{o.total.toLocaleString()}</span>
+                           <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full border ${
                              o.status === 'delivered' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-amber-50 border-amber-100 text-amber-600'
-                           }`}>{o.status.charAt(0).toUpperCase() + o.status.slice(1)}</span>
+                           }`}>{o.status}</span>
                         </div>
                      </div>
                    ))}
@@ -261,31 +261,31 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
               <table className="w-full text-left min-w-[800px]">
                 <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
-                    <th className="px-6 py-4 font-bold text-slate-500 text-xs uppercase tracking-wider">Product Name</th>
-                    <th className="px-6 py-4 font-bold text-slate-500 text-xs uppercase tracking-wider">Category</th>
-                    <th className="px-6 py-4 font-bold text-slate-500 text-xs uppercase tracking-wider">Inventory</th>
-                    <th className="px-6 py-4 font-bold text-slate-500 text-xs uppercase tracking-wider">Price</th>
-                    <th className="px-6 py-4 font-bold text-slate-500 text-xs uppercase tracking-wider text-right">Actions</th>
+                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Product Name</th>
+                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Category</th>
+                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Stock</th>
+                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Price</th>
+                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {products.map(p => (
                     <tr key={p.id} className="hover:bg-slate-50/50 group transition-colors">
-                      <td className="px-6 py-4">
+                      <td className="px-8 py-5">
                         <div className="flex flex-col">
-                          <span className="font-bold text-slate-900 text-[13px] leading-tight">{p.name}</span>
-                          <span className="text-[11px] font-medium text-slate-400 italic mt-0.5">{p.scientificName || 'Unlabeled Specimen'}</span>
+                          <span className="font-bold text-slate-900 text-sm leading-tight">{p.name}</span>
+                          <span className="text-xs font-medium text-slate-400 italic mt-1">{p.scientificName || 'No Scientific Name'}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                         <span className="text-slate-500 font-bold text-[11px] bg-slate-100 px-2 py-1 rounded-md border border-slate-200">{p.category}</span>
+                      <td className="px-8 py-5">
+                         <span className="text-slate-500 font-bold text-xs bg-slate-100 px-3 py-1 rounded-md border border-slate-200">{p.category}</span>
                       </td>
-                      <td className="px-6 py-4 font-bold text-sm text-slate-700">{p.stock}</td>
-                      <td className="px-6 py-4 font-bold text-sm text-slate-900">₹{p.price.toLocaleString()}</td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex justify-end gap-2 opacity-30 group-hover:opacity-100 transition-all">
-                          <button onClick={() => { setEditingProduct(p); setProductForm({...p, variations: p.variations || []} as any); setIsProductModalOpen(true); }} className="p-2 text-slate-500 hover:text-sky-600 hover:bg-sky-50 rounded-md transition-colors"><Edit2Icon size={16} /></button>
-                          <button onClick={() => { if(confirm('Delete this product?')) setProducts(products.filter(i=>i.id!==p.id)) }} className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"><TrashIcon size={16} /></button>
+                      <td className="px-8 py-5 font-bold text-sm text-slate-700">{p.stock}</td>
+                      <td className="px-8 py-5 font-bold text-sm text-slate-900">₹{p.price}</td>
+                      <td className="px-8 py-5 text-right">
+                        <div className="flex justify-end gap-3 opacity-30 group-hover:opacity-100 transition-all">
+                          <button onClick={() => { setEditingProduct(p); setProductForm({...p, variations: p.variations || []} as any); setIsProductModalOpen(true); }} className="p-2.5 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-md transition-colors"><Edit2 size={20} /></button>
+                          <button onClick={() => { if(confirm('Delete this product?')) setProducts(products.filter(i=>i.id!==p.id)) }} className="p-2.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"><Trash2 size={20} /></button>
                         </div>
                       </td>
                     </tr>
@@ -300,22 +300,22 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
               <table className="w-full text-left min-w-[700px]">
                 <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
-                    <th className="px-6 py-4 font-bold text-slate-500 text-xs uppercase tracking-wider">Order ID</th>
-                    <th className="px-6 py-4 font-bold text-slate-500 text-xs uppercase tracking-wider">Customer Name</th>
-                    <th className="px-6 py-4 font-bold text-slate-500 text-xs uppercase tracking-wider">Order Total</th>
-                    <th className="px-6 py-4 font-bold text-slate-500 text-xs uppercase tracking-wider text-right">Management</th>
+                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Order ID</th>
+                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Customer Name</th>
+                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Total Amount</th>
+                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {orders.slice().reverse().map(o => (
                     <tr key={o.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 font-bold text-sky-600 text-[13px]">#{o.id}</td>
-                      <td className="px-6 py-4 font-bold text-slate-900 text-[13px]">{o.customerName}</td>
-                      <td className="px-6 py-4 font-bold text-slate-900 text-[13px]">₹{o.total.toLocaleString()}</td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-8 py-5 font-bold text-sky-600 text-sm">#{o.id}</td>
+                      <td className="px-8 py-5 font-bold text-slate-900 text-sm">{o.customerName}</td>
+                      <td className="px-8 py-5 font-bold text-slate-900 text-sm">₹{o.total.toLocaleString()}</td>
+                      <td className="px-8 py-5 text-right">
                         <div className="flex justify-end gap-3">
-                          <button onClick={() => navigate(`/invoice/${o.id}`, { state: { orderData: o } })} className="p-2.5 bg-slate-100 text-slate-600 rounded-md hover:bg-slate-900 hover:text-white transition-all"><FileText size={16}/></button>
-                          <button onClick={() => { if(confirm('Remove order record?')) setOrders(orders.filter(ord=>ord.id!==o.id)) }} className="p-2.5 text-slate-400 hover:text-red-600 transition-all"><Trash2 size={16}/></button>
+                          <button onClick={() => navigate(`/invoice/${o.id}`, { state: { orderData: o } })} className="p-3 bg-slate-100 text-slate-600 rounded-md hover:bg-slate-900 hover:text-white transition-all"><FileText size={20}/></button>
+                          <button onClick={() => { if(confirm('Remove this order record?')) setOrders(orders.filter(ord=>ord.id!==o.id)) }} className="p-3 text-slate-400 hover:text-red-600 transition-all"><Trash2 size={20}/></button>
                         </div>
                       </td>
                     </tr>
@@ -326,88 +326,88 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
           )}
 
           {activeTab === 'Invoice' && (
-            <div className="max-w-4xl space-y-6 mx-auto">
-               <form onSubmit={generateManualInvoice} className="space-y-6">
-                <div className="bg-white border border-slate-200 p-8 rounded-md shadow-sm">
+            <div className="max-w-4xl space-y-8 mx-auto">
+               <form onSubmit={generateManualInvoice} className="space-y-8">
+                <div className="bg-white border border-slate-200 p-10 rounded-md shadow-sm">
                   <div className="flex items-center gap-3 mb-8 border-b border-slate-100 pb-4">
-                    <UserCheck size={20} className="text-sky-600" />
-                    <h3 className="font-extrabold text-slate-900 text-sm uppercase tracking-wider">Customer Information</h3>
+                    <UserCheck size={24} className="text-sky-600" />
+                    <h3 className="font-extrabold text-slate-900 text-sm uppercase tracking-wider">Customer Details</h3>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
+                      <div className="space-y-1.5">
                         <label className="text-[10px] font-bold text-slate-400 uppercase">First Name</label>
-                        <input required className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-bold rounded-md outline-none focus:border-sky-500 transition-colors text-sm" value={invoiceForm.firstName} onChange={e => setInvoiceForm({...invoiceForm, firstName: e.target.value})} />
+                        <input required placeholder="First Name" className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md outline-none focus:border-slate-900 transition-all text-sm" value={invoiceForm.firstName} onChange={e => setInvoiceForm({...invoiceForm, firstName: e.target.value})} />
                       </div>
-                      <div className="space-y-1">
+                      <div className="space-y-1.5">
                         <label className="text-[10px] font-bold text-slate-400 uppercase">Last Name</label>
-                        <input required className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-bold rounded-md outline-none focus:border-sky-500 transition-colors text-sm" value={invoiceForm.lastName} onChange={e => setInvoiceForm({...invoiceForm, lastName: e.target.value})} />
+                        <input required placeholder="Last Name" className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md outline-none focus:border-slate-900 transition-all text-sm" value={invoiceForm.lastName} onChange={e => setInvoiceForm({...invoiceForm, lastName: e.target.value})} />
                       </div>
                     </div>
-                    <div className="space-y-1">
+                    <div className="space-y-1.5">
                        <label className="text-[10px] font-bold text-slate-400 uppercase">Phone Number</label>
-                       <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 px-4 py-3 rounded-md focus-within:border-sky-500 transition-colors">
-                          <Phone size={16} className="text-slate-300"/>
-                          <input required type="tel" className="w-full bg-transparent font-bold outline-none text-sm" placeholder="Mobile number..." value={invoiceForm.phone} onChange={e => setInvoiceForm({...invoiceForm, phone: e.target.value})} />
+                       <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 px-5 py-4 rounded-md focus-within:border-slate-900 transition-all">
+                          <Phone size={18} className="text-slate-300"/>
+                          <input required type="tel" className="w-full bg-transparent font-bold outline-none text-sm" placeholder="Phone Number" value={invoiceForm.phone} onChange={e => setInvoiceForm({...invoiceForm, phone: e.target.value})} />
                        </div>
                     </div>
-                    <div className="md:col-span-2 space-y-1">
+                    <div className="md:col-span-2 space-y-1.5">
                        <label className="text-[10px] font-bold text-slate-400 uppercase">Shipping Address</label>
-                       <div className="flex items-start gap-3 bg-slate-50 border border-slate-200 px-4 py-3 rounded-md focus-within:border-sky-500 transition-colors">
-                          <MapPin size={16} className="text-slate-300 mt-1"/>
-                          <textarea required rows={2} className="w-full bg-transparent font-bold outline-none resize-none text-sm leading-relaxed" placeholder="Detailed address for delivery..." value={invoiceForm.address} onChange={e => setInvoiceForm({...invoiceForm, address: e.target.value})} />
+                       <div className="flex items-start gap-3 bg-slate-50 border border-slate-200 px-5 py-4 rounded-md focus-within:border-slate-900 transition-all">
+                          <MapPin size={18} className="text-slate-300 mt-1"/>
+                          <textarea required rows={2} className="w-full bg-transparent font-bold outline-none resize-none text-sm leading-relaxed" placeholder="Detailed Address" value={invoiceForm.address} onChange={e => setInvoiceForm({...invoiceForm, address: e.target.value})} />
                        </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 p-8 rounded-md shadow-sm">
+                <div className="bg-white border border-slate-200 p-10 rounded-md shadow-sm">
                   <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
                     <div className="flex items-center gap-3">
-                      <ClipboardList size={20} className="text-sky-600" />
-                      <h3 className="font-extrabold text-slate-900 text-sm uppercase tracking-wider">Item Details</h3>
+                      <ClipboardList size={24} className="text-sky-600" />
+                      <h3 className="font-extrabold text-slate-900 text-sm uppercase tracking-wider">Itemized List</h3>
                     </div>
-                    <button type="button" onClick={() => setInvoiceForm({...invoiceForm, items: [...invoiceForm.items, { id: 'manual-' + Date.now(), name: '', quantity: 1, price: 0, weight: 0 }]})} className="px-5 py-2 border border-sky-100 text-sky-600 bg-sky-50/30 font-bold uppercase text-[10px] tracking-wider rounded-md hover:bg-sky-50 transition-all">+ Add New Row</button>
+                    <button type="button" onClick={() => setInvoiceForm({...invoiceForm, items: [...invoiceForm.items, { id: 'manual-' + Date.now(), name: '', quantity: 1, price: 0, weight: 0 }]})} className="px-6 py-2 border border-sky-100 text-sky-600 bg-sky-50/50 font-bold uppercase text-[10px] tracking-wider rounded-md hover:bg-sky-100 transition-all shadow-sm">+ Add Item</button>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {invoiceForm.items.map((item, idx) => (
-                      <div key={item.id} className="grid grid-cols-12 gap-4 items-center bg-slate-50 p-3 rounded-md border border-slate-100 group">
+                      <div key={item.id} className="grid grid-cols-12 gap-5 items-center bg-slate-50 p-4 rounded-md border border-slate-100 group">
                         <div className="col-span-6 md:col-span-5">
-                          <input required placeholder="Item Description" className="w-full bg-white px-4 py-2 border border-slate-200 font-bold rounded-md outline-none focus:border-sky-500 transition-all text-[13px]" value={item.name} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, name: e.target.value } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
+                          <input required placeholder="Description" className="w-full bg-white px-4 py-3 border border-slate-200 font-bold rounded-md outline-none focus:border-slate-900 transition-all text-sm" value={item.name} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, name: e.target.value } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
                         </div>
                         <div className="col-span-2 md:col-span-1">
-                          <input required type="number" className="w-full bg-white px-2 py-2 border border-slate-200 font-bold rounded-md text-center text-[13px]" value={item.quantity} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, quantity: parseInt(e.target.value)||1 } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
+                          <input required type="number" placeholder="Qty" className="w-full bg-white px-2 py-3 border border-slate-200 font-bold rounded-md text-center text-sm" value={item.quantity} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, quantity: parseInt(e.target.value)||1 } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
                         </div>
                         <div className="col-span-2 md:col-span-2">
-                          <input required type="number" placeholder="Price" className="w-full bg-white px-2 py-2 border border-slate-200 font-bold rounded-md text-center text-[13px]" value={item.price} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, price: parseInt(e.target.value)||0 } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
+                          <input required type="number" placeholder="Price" className="w-full bg-white px-3 py-3 border border-slate-200 font-bold rounded-md text-center text-sm" value={item.price} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, price: parseInt(e.target.value)||0 } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
                         </div>
                         <div className="col-span-1 md:col-span-2 hidden md:block">
-                          <input required type="number" step="0.01" placeholder="Wt (kg)" className="w-full bg-white px-2 py-2 border border-slate-200 font-bold rounded-md text-center text-[13px]" value={item.weight} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, weight: parseFloat(e.target.value)||0 } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
+                          <input required type="number" step="0.01" placeholder="Weight" className="w-full bg-white px-3 py-3 border border-slate-200 font-bold rounded-md text-center text-sm" value={item.weight} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, weight: parseFloat(e.target.value)||0 } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
                         </div>
-                        <div className="col-span-1 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button type="button" onClick={() => { if(invoiceForm.items.length > 1) setInvoiceForm({...invoiceForm, items: invoiceForm.items.filter(i=>i.id!==item.id)}) }} className="p-2 text-slate-300 hover:text-red-500"><Trash2 size={18}/></button>
+                        <div className="col-span-1 flex justify-end opacity-0 group-hover:opacity-100 transition-all">
+                          <button type="button" onClick={() => { if(invoiceForm.items.length > 1) setInvoiceForm({...invoiceForm, items: invoiceForm.items.filter(i=>i.id!==item.id)}) }} className="p-2 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={20}/></button>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-8 flex flex-col sm:flex-row justify-between items-center gap-6 border-t border-slate-100 pt-8">
+                  <div className="mt-10 flex flex-col sm:flex-row justify-between items-center gap-8 border-t border-slate-100 pt-8">
                     <div className="flex items-center gap-4">
-                        <label className="font-bold text-slate-400 uppercase text-[10px]">Tax Rate</label>
-                        <select className="bg-slate-50 border border-slate-200 px-4 py-2 font-bold rounded-md text-xs" value={invoiceForm.taxRate} onChange={e => setInvoiceForm({...invoiceForm, taxRate: parseInt(e.target.value)})}>
-                           <option value="0">GST 0%</option>
-                           <option value="5">GST 5%</option>
-                           <option value="12">GST 12%</option>
-                           <option value="18">GST 18%</option>
+                        <label className="font-bold text-slate-400 uppercase text-[10px] tracking-widest">Tax (GST)</label>
+                        <select className="bg-slate-100 border border-slate-200 px-4 py-2 font-bold rounded-md text-xs" value={invoiceForm.taxRate} onChange={e => setInvoiceForm({...invoiceForm, taxRate: parseInt(e.target.value)})}>
+                           <option value="0">0%</option>
+                           <option value="5">5%</option>
+                           <option value="12">12%</option>
+                           <option value="18">18%</option>
                         </select>
                     </div>
                     <div className="text-right">
-                       <p className="font-bold text-slate-400 uppercase text-[10px] mb-1">Total Payable</p>
+                       <p className="font-bold text-slate-400 uppercase text-[10px] tracking-widest mb-1">Total Payable</p>
                        <p className="text-4xl font-black text-slate-900 tracking-tighter">₹{(invoiceForm.items.reduce((acc, i) => acc + (i.price * i.quantity), 0) + (invoiceForm.items.reduce((acc, i) => acc + (i.price * i.quantity), 0) * invoiceForm.taxRate / 100)).toLocaleString()}</p>
                     </div>
                   </div>
-                  <button type="submit" className="w-full mt-10 py-4 bg-slate-900 text-white font-bold rounded-md hover:bg-sky-600 transition-all flex items-center justify-center gap-3 shadow-xl text-sm uppercase tracking-widest">
-                     <Printer size={18} />
-                     Generate and Print Receipt
+                  <button type="submit" className="w-full mt-12 py-5 bg-slate-900 text-white font-black uppercase tracking-[0.3em] rounded-md hover:bg-sky-600 transition-all flex items-center justify-center gap-3 shadow-xl text-sm">
+                     <Printer size={20} />
+                     Generate and Print Invoice
                   </button>
                 </div>
                </form>
@@ -416,75 +416,75 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
         </div>
       </main>
 
-      {/* Product Modal */}
+      {/* Product Management Modal */}
       {isProductModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-white w-full max-w-2xl p-8 relative rounded-lg animate-fade-in shadow-2xl border border-slate-200">
-            <button onClick={() => setIsProductModalOpen(false)} className="absolute top-8 right-8 text-slate-400 hover:text-slate-900 transition-colors"><X size={24} /></button>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white w-full max-w-2xl p-10 relative rounded-lg animate-fade-in shadow-2xl border border-slate-200">
+            <button onClick={() => setIsProductModalOpen(false)} className="absolute top-8 right-8 text-slate-400 hover:text-slate-900 transition-colors"><X size={28} /></button>
             
-            <div className="mb-8 flex items-center gap-3">
-               <div className="p-3 bg-sky-50 rounded-lg"><Layers size={22} className="text-sky-600" /></div>
+            <div className="mb-10 flex items-center gap-4">
+               <div className="p-3 bg-sky-50 rounded-lg"><Layers size={28} className="text-sky-600" /></div>
                <div>
-                  <h2 className="text-xl font-extrabold text-slate-900">
-                    {editingProduct ? 'Modify Product' : 'Add New Product'}
+                  <h2 className="text-2xl font-black text-slate-900">
+                    {editingProduct ? 'Edit Product Details' : 'Add New Product'}
                   </h2>
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Inventory Management Portal</p>
                </div>
             </div>
             
-            <form onSubmit={handleSaveProduct} className="space-y-6">
+            <form onSubmit={handleSaveProduct} className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-4">
+                <div className="space-y-5">
                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase">Product Display Name *</label>
-                      <input required className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-bold rounded-md outline-none focus:border-sky-500 transition-all text-sm" value={productForm.name} onChange={e => setProductForm({...productForm, name: e.target.value})} />
+                      <label className="text-[10px] font-bold text-slate-400 uppercase">Product Name *</label>
+                      <input required placeholder="e.g., Premium Halfmoon Betta" className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md outline-none focus:border-slate-900 transition-all text-sm" value={productForm.name} onChange={e => setProductForm({...productForm, name: e.target.value})} />
                    </div>
                    <div className="space-y-1.5">
                       <label className="text-[10px] font-bold text-slate-400 uppercase">Scientific Name</label>
-                      <input className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-bold rounded-md outline-none focus:border-sky-500 transition-all italic text-sm" placeholder="Genus species..." value={productForm.scientificName} onChange={e => setProductForm({...productForm, scientificName: e.target.value})} />
+                      <input placeholder="e.g., Betta splendens" className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md outline-none focus:border-slate-900 transition-all italic text-sm" value={productForm.scientificName} onChange={e => setProductForm({...productForm, scientificName: e.target.value})} />
                    </div>
-                   <div className="grid grid-cols-2 gap-4">
+                   <div className="grid grid-cols-2 gap-5">
                       <div className="space-y-1.5">
                          <label className="text-[10px] font-bold text-slate-400 uppercase">Category</label>
-                         <select className="w-full bg-slate-50 border border-slate-200 px-3 py-2.5 font-bold rounded-md text-xs" value={productForm.category} onChange={e => setProductForm({...productForm, category: e.target.value})}>
+                         <select className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-bold rounded-md text-xs" value={productForm.category} onChange={e => setProductForm({...productForm, category: e.target.value})}>
                             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                          </select>
                       </div>
                       <div className="space-y-1.5">
                          <label className="text-[10px] font-bold text-slate-400 uppercase">Care Level</label>
-                         <select className="w-full bg-slate-50 border border-slate-200 px-3 py-2.5 font-bold rounded-md text-xs" value={productForm.careLevel} onChange={e => setProductForm({...productForm, careLevel: e.target.value as any})}>
-                            <option value="Easy">Beginner</option>
-                            <option value="Moderate">Experienced</option>
-                            <option value="Advanced">Professional</option>
+                         <select className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-bold rounded-md text-xs" value={productForm.careLevel} onChange={e => setProductForm({...productForm, careLevel: e.target.value as any})}>
+                            <option value="Easy">Easy</option>
+                            <option value="Moderate">Moderate</option>
+                            <option value="Advanced">Advanced</option>
                          </select>
                       </div>
                    </div>
                 </div>
 
-                <div className="space-y-4">
-                   <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-5">
+                   <div className="grid grid-cols-2 gap-5">
                       <div className="space-y-1.5">
-                         <label className="text-[10px] font-bold text-slate-400 uppercase">Unit Price (₹) *</label>
-                         <input type="number" required className="w-full bg-white border border-sky-100 px-4 py-3 font-black text-sky-600 rounded-md outline-none text-base" value={productForm.price} onChange={e => setProductForm({...productForm, price: parseInt(e.target.value)||0})} />
+                         <label className="text-[10px] font-bold text-slate-400 uppercase">Price (₹) *</label>
+                         <input type="number" required className="w-full bg-white border border-sky-100 px-5 py-4 font-black text-sky-600 rounded-md outline-none text-base" value={productForm.price} onChange={e => setProductForm({...productForm, price: parseInt(e.target.value)||0})} />
                       </div>
                       <div className="space-y-1.5">
-                         <label className="text-[10px] font-bold text-slate-400 uppercase">Stock Level *</label>
-                         <input type="number" required className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-bold rounded-md text-sm" value={productForm.stock} onChange={e => setProductForm({...productForm, stock: parseInt(e.target.value)||0})} />
+                         <label className="text-[10px] font-bold text-slate-400 uppercase">Current Stock *</label>
+                         <input type="number" required className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md text-sm" value={productForm.stock} onChange={e => setProductForm({...productForm, stock: parseInt(e.target.value)||0})} />
                       </div>
                    </div>
                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase">Unit Weight (kg) *</label>
-                      <input type="number" step="0.01" required className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-bold rounded-md text-sm" value={productForm.weight} onChange={e => setProductForm({...productForm, weight: parseFloat(e.target.value)||0})} />
+                      <label className="text-[10px] font-bold text-slate-400 uppercase">Weight per Unit (kg) *</label>
+                      <input type="number" step="0.01" required className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md text-sm" value={productForm.weight} onChange={e => setProductForm({...productForm, weight: parseFloat(e.target.value)||0})} />
                    </div>
                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase">Product Media</label>
+                      <label className="text-[10px] font-bold text-slate-400 uppercase">Product Image</label>
                       <div className="flex gap-4">
-                         <button type="button" onClick={() => fileInputRef.current?.click()} className="flex-grow py-3 px-4 bg-slate-900 text-white font-bold rounded-md hover:bg-sky-600 transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider">
-                            <ImageIcon size={16}/>
+                         <button type="button" onClick={() => fileInputRef.current?.click()} className="flex-grow py-4 px-5 bg-slate-900 text-white font-bold rounded-md hover:bg-sky-600 transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-widest">
+                            <ImageIcon size={18}/>
                             {productForm.image ? 'Change Photo' : 'Upload Photo'}
                          </button>
                          {productForm.image && (
-                           <div className="w-12 h-12 bg-slate-50 rounded-md border border-slate-200 overflow-hidden shrink-0 shadow-sm"><img src={productForm.image} className="w-full h-full object-cover" /></div>
+                           <div className="w-16 h-16 bg-slate-50 rounded-md border border-slate-200 overflow-hidden shrink-0 shadow-sm"><img src={productForm.image} className="w-full h-full object-cover" /></div>
                          )}
                       </div>
                       <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={e => {
@@ -500,12 +500,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
               </div>
 
               <div className="space-y-1.5">
-                 <label className="text-[10px] font-bold text-slate-400 uppercase">Detailed Description</label>
-                 <textarea required rows={4} className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-medium rounded-md resize-none outline-none focus:border-sky-500 transition-colors text-sm leading-relaxed" placeholder="Record characteristics, origin, and care instructions..." value={productForm.description} onChange={e => setProductForm({...productForm, description: e.target.value})} />
+                 <label className="text-[10px] font-bold text-slate-400 uppercase">Product Description</label>
+                 <textarea required rows={4} className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-medium rounded-md resize-none outline-none focus:border-slate-900 transition-all text-sm leading-relaxed" placeholder="Species details, care instructions, etc..." value={productForm.description} onChange={e => setProductForm({...productForm, description: e.target.value})} />
               </div>
 
-              <button type="submit" className="w-full py-5 bg-sky-600 text-white font-black rounded-md hover:bg-sky-700 transition-all shadow-2xl active:scale-[0.98] text-sm uppercase tracking-[0.2em] mt-4">
-                {editingProduct ? 'Commit Product Changes' : 'Confirm and List Product'}
+              <button type="submit" className="w-full py-5 bg-sky-600 text-white font-black uppercase tracking-[0.2em] rounded-md hover:bg-sky-700 transition-all shadow-2xl active:scale-[0.98] text-sm mt-4">
+                {editingProduct ? 'Save Changes' : 'Add to Inventory'}
               </button>
             </form>
           </div>

@@ -27,7 +27,7 @@ const AdminLogin: React.FC = () => {
         sessionStorage.setItem('mvs_aqua_admin', '1');
         navigate('/admin');
       } else {
-        setError('ACCESS DENIED: VERIFICATION FAILED.');
+        setError('Access Denied: Verification Failed.');
         setIsLoading(false);
       }
     }, 1200);
@@ -37,47 +37,47 @@ const AdminLogin: React.FC = () => {
     <div className="relative min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 via-emerald-500 to-sky-500 animate-pulse" />
       
-      <div className="w-full max-w-xs z-10 animate-fade-in transition-all duration-700 transform">
+      <div className="w-full max-w-sm z-10 animate-fade-in transition-all duration-700 transform">
         {/* Simple Back Link */}
-        <Link to="/" className="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-black mb-6 transition-colors group">
-          <ArrowLeft size={12} className="group-hover:-translate-x-1 transition-transform" />
-          <span>Exit to Terminal</span>
+        <Link to="/" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-black mb-8 transition-colors group">
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          <span>Back to Store</span>
         </Link>
 
-        <div className="bg-white border border-slate-200 rounded-sm p-8 shadow-2xl animate-[slide-up_0.6s_ease-out]">
-          <div className="text-center mb-8">
-            <div className="w-10 h-10 bg-black text-white flex items-center justify-center mx-auto mb-4 rounded-sm shadow-xl">
-              <Lock size={16} />
+        <div className="bg-white border border-slate-200 rounded-lg p-10 shadow-2xl shadow-slate-200/50">
+          <div className="text-center mb-10">
+            <div className="w-12 h-12 bg-slate-900 text-white flex items-center justify-center mx-auto mb-6 rounded-lg shadow-xl">
+              <Lock size={20} />
             </div>
-            <h1 className="text-lg font-black text-black uppercase tracking-[0.2em]">ADMIN <span className="text-sky-600">CONSOLE</span></h1>
-            <p className="text-slate-400 text-[8px] font-black uppercase tracking-widest mt-1.5">Authorization Required</p>
+            <h1 className="text-xl font-extrabold text-slate-900 uppercase tracking-widest">Admin Access</h1>
+            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-2">Authorized Personnel Only</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-1">
-              <label className="text-[7px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                <User size={8} />
-                OPERATOR ID
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 flex items-center gap-2">
+                <User size={12} className="text-sky-500" />
+                Username
               </label>
               <input
                 type="text"
                 required
-                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-sm text-black font-bold focus:outline-none focus:border-black focus:bg-white transition-all text-[10px]"
-                placeholder="UID..."
+                className="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-md text-slate-900 font-bold focus:outline-none focus:border-sky-500 focus:bg-white transition-all text-sm"
+                placeholder="Enter ID"
                 value={username}
                 onChange={e => setUsername(e.target.value)}
               />
             </div>
 
-            <div className="space-y-1">
-              <label className="text-[7px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                <Lock size={8} />
-                SECURE KEY
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 flex items-center gap-2">
+                <Lock size={12} className="text-sky-500" />
+                Password
               </label>
               <input
                 type="password"
                 required
-                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-sm text-black font-bold focus:outline-none focus:border-black focus:bg-white transition-all text-[10px]"
+                className="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-md text-slate-900 font-bold focus:outline-none focus:border-sky-500 focus:bg-white transition-all text-sm"
                 placeholder="••••••••"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
@@ -85,8 +85,8 @@ const AdminLogin: React.FC = () => {
             </div>
 
             {error && (
-              <div className="p-2 bg-red-50 text-red-600 text-[7px] font-black uppercase tracking-widest flex items-center gap-2 rounded-sm border border-red-100 animate-shake">
-                <ShieldAlert size={12} />
+              <div className="p-3 bg-red-50 text-red-600 text-xs font-bold flex items-center gap-3 rounded-md border border-red-100 animate-shake">
+                <ShieldAlert size={16} />
                 <span>{error}</span>
               </div>
             )}
@@ -94,30 +94,26 @@ const AdminLogin: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 bg-black hover:bg-sky-600 text-white font-black text-[9px] uppercase tracking-[0.3em] rounded-sm transition-all flex items-center justify-center gap-3 disabled:opacity-50 active:scale-[0.98] shadow-lg"
+              className="w-full py-4 bg-slate-900 hover:bg-sky-600 text-white font-black text-xs uppercase tracking-[0.3em] rounded-md transition-all flex items-center justify-center gap-3 disabled:opacity-50 active:scale-[0.98] shadow-lg"
             >
               {isLoading ? (
-                <Loader2 className="animate-spin" size={14} />
+                <Loader2 className="animate-spin" size={18} />
               ) : (
                 <>
-                  <span>LOGIN</span>
-                  <ChevronRight size={12} />
+                  <span>Login to Console</span>
+                  <ChevronRight size={16} />
                 </>
               )}
             </button>
           </form>
         </div>
 
-        <div className="mt-8 text-center">
-          <p className="text-[7px] font-black text-slate-300 uppercase tracking-[0.5em]">MVS AQUA HUB · TIRUPATI</p>
+        <div className="mt-10 text-center">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">MVS Aqua · Tirupati Hub</p>
         </div>
       </div>
 
       <style>{`
-        @keyframes slide-up {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-4px); }
