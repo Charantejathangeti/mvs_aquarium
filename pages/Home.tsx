@@ -2,9 +2,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Zap, Shield, Droplets, LayoutGrid, CheckCircle2, Star, Sparkles, Heart } from 'lucide-react';
-import { MOCK_PRODUCTS } from '../constants';
+import { Product } from '../types';
 
-const Home: React.FC = () => {
+interface HomeProps {
+  products: Product[];
+}
+
+const Home: React.FC<HomeProps> = ({ products }) => {
   const categoryTabs = [
     { name: 'Bettas', image: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&q=80&w=400' },
     { name: 'Tetras', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=400' },
@@ -12,7 +16,8 @@ const Home: React.FC = () => {
     { name: 'Plants', image: 'https://images.unsplash.com/photo-1546024073-922623a8a84b?auto=format&fit=crop&q=80&w=400' }
   ];
 
-  const featured = MOCK_PRODUCTS.slice(0, 4);
+  // Show latest 4 products from the live state
+  const featured = products.slice(-4).reverse();
 
   return (
     <div className="space-y-12 pb-20">

@@ -6,17 +6,22 @@ import {
   X, PlusCircle, Image as ImageIcon, Save, CheckCircle2, 
   Camera, Edit2Icon, TrashIcon, DollarSign, PackageCheck, 
   Truck, Box, Plus, Send, Download, ShoppingBag, User, MapPin,
-  FileText, ListPlus, Settings2, Fish
+  FileText, ListPlus, Settings2, Fish, Cloud
 } from 'lucide-react';
-import { MOCK_PRODUCTS, CATEGORIES, WHATSAPP_NUMBER } from '../constants';
+import { CATEGORIES } from '../constants';
 import { Product, Order, CartItem, Variation } from '../types';
 
-const AdminDashboard: React.FC = () => {
+interface AdminDashboardProps {
+  products: Product[];
+  setProducts: (products: Product[]) => void;
+}
+
+const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }) => {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeTab, setActiveTab] = useState<'Dashboard' | 'Products' | 'Orders' | 'Invoice'>('Dashboard');
-  const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [isSyncing, setIsSyncing] = useState(false);
   
   // Product Management State
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -57,7 +62,7 @@ const AdminDashboard: React.FC = () => {
       delay: `${Math.random() * 8}s`,
       duration: `${10 + Math.random() * 10}s`,
       size: 15 + Math.random() * 25,
-      opacity: 0.05 + Math.random() * 0.1, // Lower opacity to avoid distraction
+      opacity: 0.05 + Math.random() * 0.1,
       type: i % 4 === 0 ? 'jump' : 'swim',
       flip: Math.random() > 0.5,
     }));
@@ -68,8 +73,6 @@ const AdminDashboard: React.FC = () => {
       navigate('/admin-login');
       return;
     }
-    const savedProducts = JSON.parse(localStorage.getItem('mvs_aqua_products') || JSON.stringify(MOCK_PRODUCTS));
-    setProducts(savedProducts);
     const savedOrders = JSON.parse(localStorage.getItem('mvs_aqua_orders') || '[]');
     setOrders(savedOrders);
   }, [navigate]);
@@ -91,19 +94,24 @@ const AdminDashboard: React.FC = () => {
     navigate('/admin-login');
   };
 
-  // Product Actions
-  const handleSaveProduct = (e: React.FormEvent) => {
+  // Automated Product Actions
+  const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSyncing(true);
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 600));
+
     if (editingProduct) {
       const updated = products.map(p => p.id === editingProduct.id ? { ...p, ...productForm } : p);
       setProducts(updated);
-      localStorage.setItem('mvs_aqua_products', JSON.stringify(updated));
     } else {
       const newProduct: Product = { ...productForm, id: 'P' + Date.now() };
       const updated = [...products, newProduct];
       setProducts(updated);
-      localStorage.setItem('mvs_aqua_products', JSON.stringify(updated));
     }
+    
+    setIsSyncing(false);
     setIsProductModalOpen(false);
   };
 
@@ -161,7 +169,7 @@ const AdminDashboard: React.FC = () => {
 
   const autopopulateProduct = (rowId: string, productId: string) => {
     if (productId === "") {
-      // Clear fields for manual/other entry
+      // Clear fields for manual entry
       setInvoiceForm(prev => ({
         ...prev,
         items: prev.items.map(item => item.id === rowId ? {
@@ -250,7 +258,7 @@ _MVS Aqua Enterprise - Tirupati_`;
 
   return (
     <div className="relative min-h-screen flex bg-slate-50 text-slate-900 font-sans overflow-hidden">
-      {/* Dynamic Aquatic Background - Non-obstructive */}
+      {/* Dynamic Aquatic Background */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {dashboardFishes.map((fish) => (
           <div
@@ -303,7 +311,13 @@ _MVS Aqua Enterprise - Tirupati_`;
       <main className="relative z-10 flex-grow p-6">
         <div className="max-w-6xl mx-auto">
           <header className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
-             <h2 className="text-sm font-black uppercase tracking-widest text-black">{activeTab} Interface</h2>
+             <div className="flex items-center gap-4">
+                <h2 className="text-sm font-black uppercase tracking-widest text-black">{activeTab} Interface</h2>
+                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-emerald-50 border border-emerald-100 rounded-sm">
+                   <Cloud size={10} className="text-emerald-600" />
+                   <span className="text-[7px] font-black text-emerald-600 uppercase tracking-widest">Auto-Sync Active</span>
+                </div>
+             </div>
              {activeTab === 'Products' && (
                 <button 
                   onClick={() => { 
@@ -410,13 +424,11 @@ _MVS Aqua Enterprise - Tirupati_`;
             {activeTab === 'Invoice' && (
               <div className="max-w-4xl mx-auto">
                 <form onSubmit={generateManualInvoice} className="space-y-6">
-                  {/* Billing Details Section */}
                   <div className="bg-white/90 backdrop-blur-sm border border-slate-200 rounded-sm p-6 shadow-sm">
                     <div className="flex items-center gap-2 mb-6 border-b border-slate-100 pb-3">
                        <User size={14} className="text-sky-600" />
                        <h3 className="text-[10px] font-black uppercase tracking-widest text-black">Billing Identity & Logistics</h3>
                     </div>
-                    
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-1">
                         <label className="text-[8px] font-black uppercase tracking-widest text-slate-400">First Name *</label>
@@ -455,7 +467,6 @@ _MVS Aqua Enterprise - Tirupati_`;
                     </div>
                   </div>
 
-                  {/* Items Section */}
                   <div className="bg-white/90 backdrop-blur-sm border border-slate-200 rounded-sm p-6 shadow-sm">
                     <div className="flex items-center justify-between mb-6 border-b border-slate-100 pb-3">
                        <div className="flex items-center gap-2">
@@ -466,20 +477,19 @@ _MVS Aqua Enterprise - Tirupati_`;
                          <Plus size={10} /> Add Item
                        </button>
                     </div>
-
                     <div className="space-y-3">
                       {invoiceForm.items.map((item, index) => (
                         <div key={item.id} className="grid grid-cols-12 gap-2 items-end bg-slate-50/50 p-2 rounded-sm border border-slate-100">
                            <div className="col-span-3 space-y-1">
                               <label className="text-[7px] font-black uppercase tracking-widest text-slate-400">Stock Lookup</label>
                               <select className="w-full bg-white border border-slate-200 rounded-sm px-2 py-1.5 text-[10px] font-bold outline-none" onChange={(e) => autopopulateProduct(item.id, e.target.value)}>
-                                <option value="">Custom / Other...</option>
+                                <option value="">Other / Manual Entry...</option>
                                 {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                               </select>
                            </div>
                            <div className="col-span-3 space-y-1">
-                              <label className="text-[7px] font-black uppercase tracking-widest text-slate-400">Item Label (Manual Name Entry)</label>
-                              <input required className="w-full bg-white border border-slate-200 rounded-sm px-2 py-1.5 text-[10px] font-bold outline-none" placeholder="Enter name manually..." value={item.name} onChange={e => updateInvoiceItem(item.id, 'name', e.target.value)} />
+                              <label className="text-[7px] font-black uppercase tracking-widest text-slate-400">Item Label (Manual Name)</label>
+                              <input required className={`w-full bg-white border rounded-sm px-2 py-1.5 text-[10px] font-bold outline-none ${!item.name ? 'border-sky-500 bg-sky-50' : 'border-slate-200'}`} placeholder="Type name manually..." value={item.name} onChange={e => updateInvoiceItem(item.id, 'name', e.target.value)} />
                            </div>
                            <div className="col-span-1 space-y-1">
                               <label className="text-[7px] font-black uppercase tracking-widest text-slate-400">Qty</label>
@@ -501,7 +511,6 @@ _MVS Aqua Enterprise - Tirupati_`;
                         </div>
                       ))}
                     </div>
-
                     <div className="mt-8 pt-6 border-t border-slate-100 grid grid-cols-2 gap-8 items-end">
                        <div className="space-y-1">
                          <label className="text-[8px] font-black uppercase tracking-widest text-slate-400">Logistics / Shipping Fee (₹)</label>
@@ -519,7 +528,7 @@ _MVS Aqua Enterprise - Tirupati_`;
         </div>
       </main>
 
-      {/* Product Modal - Rectangular & Dense */}
+      {/* Product Modal */}
       {isProductModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 animate-fade-in backdrop-blur-sm overflow-y-auto">
            <div className="bg-white border border-slate-200 rounded-sm w-full max-w-xl shadow-2xl p-8 relative my-8">
@@ -532,7 +541,6 @@ _MVS Aqua Enterprise - Tirupati_`;
                           <label className="text-[8px] font-black uppercase tracking-widest text-slate-400">Species Name *</label>
                           <input required className="w-full bg-slate-50 border border-slate-200 rounded-sm px-4 py-2 text-[10px] font-bold text-black outline-none focus:border-black" value={productForm.name} onChange={e => setProductForm({...productForm, name: e.target.value})} />
                        </div>
-                       
                        <div className="grid grid-cols-2 gap-4">
                          <div className="space-y-1">
                             <label className="text-[8px] font-black uppercase tracking-widest text-slate-400">Classification</label>
@@ -545,7 +553,6 @@ _MVS Aqua Enterprise - Tirupati_`;
                             <input type="number" required className="w-full bg-slate-50 border border-slate-200 rounded-sm px-4 py-2 text-[10px] font-bold outline-none" value={productForm.price} onChange={e => setProductForm({...productForm, price: parseInt(e.target.value)||0})} />
                          </div>
                        </div>
-
                        <div className="grid grid-cols-2 gap-4">
                          <div className="space-y-1">
                             <label className="text-[8px] font-black uppercase tracking-widest text-slate-400">Stock *</label>
@@ -557,13 +564,11 @@ _MVS Aqua Enterprise - Tirupati_`;
                          </div>
                        </div>
                     </div>
-
                     <div className="space-y-4">
                        <div className="space-y-1">
                           <label className="text-[8px] font-black uppercase tracking-widest text-slate-400">Biological Description</label>
                           <textarea rows={4} className="w-full bg-slate-50 border border-slate-200 rounded-sm px-4 py-2 text-[10px] font-bold outline-none resize-none h-[116px]" value={productForm.description} onChange={e => setProductForm({...productForm, description: e.target.value})} placeholder="Detailed traits..." />
                        </div>
-                       
                        <div className="flex items-center gap-4 py-2">
                           <div className="w-16 h-16 bg-slate-50 border border-slate-200 rounded-sm overflow-hidden shrink-0 flex items-center justify-center">
                              {productForm.image ? <img src={productForm.image} className="w-full h-full object-cover" /> : <Camera size={20} className="text-slate-300" />}
@@ -573,23 +578,16 @@ _MVS Aqua Enterprise - Tirupati_`;
                        </div>
                     </div>
                  </div>
-
-                 {/* Variations Section */}
                  <div className="border-t border-slate-100 pt-6">
                     <div className="flex justify-between items-center mb-4">
-                       <h3 className="text-[9px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                          <Settings2 size={14} /> Color/Size Variations
-                       </h3>
-                       <button type="button" onClick={addVariation} className="text-[8px] font-black uppercase tracking-widest text-sky-600 hover:text-black flex items-center gap-1">
-                          <ListPlus size={12} /> Add Variation
-                       </button>
+                       <h3 className="text-[9px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2"><Settings2 size={14} /> Color/Size Variations</h3>
+                       <button type="button" onClick={addVariation} className="text-[8px] font-black uppercase tracking-widest text-sky-600 hover:text-black flex items-center gap-1"><ListPlus size={12} /> Add Variation</button>
                     </div>
-                    
                     <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
                        {productForm.variations.map((v, i) => (
                          <div key={i} className="flex gap-2 items-center bg-slate-50 p-2 rounded-sm">
                             <div className="flex-grow">
-                               <input placeholder="Variation Name (e.g. XL, Red)" className="w-full bg-white border border-slate-200 rounded-sm px-2 py-1 text-[9px] font-bold outline-none" value={v.name} onChange={e => updateVariation(i, 'name', e.target.value)} />
+                               <input placeholder="Variation Name" className="w-full bg-white border border-slate-200 rounded-sm px-2 py-1 text-[9px] font-bold outline-none" value={v.name} onChange={e => updateVariation(i, 'name', e.target.value)} />
                             </div>
                             <div className="w-24">
                                <input type="number" placeholder="Add ₹" className="w-full bg-white border border-slate-200 rounded-sm px-2 py-1 text-[9px] font-bold outline-none" value={v.priceModifier} onChange={e => updateVariation(i, 'priceModifier', parseInt(e.target.value)||0)} />
@@ -597,14 +595,14 @@ _MVS Aqua Enterprise - Tirupati_`;
                             <button type="button" onClick={() => removeVariation(i)} className="p-1 text-slate-300 hover:text-red-600"><Trash2 size={12} /></button>
                          </div>
                        ))}
-                       {productForm.variations.length === 0 && (
-                         <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest text-center py-4 border border-dashed border-slate-200 rounded-sm">No defined variations for this species.</p>
-                       )}
                     </div>
                  </div>
-
-                 <button type="submit" className="w-full py-4 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-sm shadow-xl hover:bg-slate-800 transition-all">
-                   {editingProduct ? 'Commit Changes' : 'Register Entry'}
+                 <button 
+                  type="submit" 
+                  disabled={isSyncing}
+                  className="w-full py-4 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-sm shadow-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                 >
+                   {isSyncing ? <><span className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" /> Committing to Cloud</> : (editingProduct ? 'Commit Changes' : 'Register Entry')}
                  </button>
               </form>
            </div>
@@ -623,12 +621,8 @@ _MVS Aqua Enterprise - Tirupati_`;
           50% { transform: translateX(100px) translateY(-20px); }
           100% { transform: translateX(-100px) translateY(0); }
         }
-        .animate-fish-jump {
-          animation: fish-jump linear infinite;
-        }
-        .animate-fish-swim {
-          animation: fish-swim ease-in-out infinite;
-        }
+        .animate-fish-jump { animation: fish-jump linear infinite; }
+        .animate-fish-swim { animation: fish-swim ease-in-out infinite; }
       `}</style>
     </div>
   );

@@ -2,23 +2,21 @@
 import React, { useState, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCw, Minus, Plus, Weight, ChevronRight } from 'lucide-react';
-import { MOCK_PRODUCTS } from '../constants';
 import { Product } from '../types';
 
 interface ProductDetailProps {
+  products: Product[];
   addToCart: (product: Product, quantity: number, variation?: string) => void;
 }
 
-const ProductDetail: React.FC<ProductDetailProps> = ({ addToCart }) => {
+const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
 
-  // Load product from mock data or local storage if needed
   const product = useMemo(() => {
-    const savedProducts = JSON.parse(localStorage.getItem('mvs_aqua_products') || JSON.stringify(MOCK_PRODUCTS));
-    return savedProducts.find((p: Product) => p.id === id);
-  }, [id]);
+    return products.find((p: Product) => p.id === id);
+  }, [id, products]);
 
   const [selectedVar, setSelectedVar] = useState<string | undefined>(
     product?.variations?.[0]?.name

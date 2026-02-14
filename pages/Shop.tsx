@@ -2,14 +2,15 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { ShoppingCart, Search, Plus, Minus, Layers, Weight, Filter, Grid3X3 } from 'lucide-react';
-import { MOCK_PRODUCTS, CATEGORIES } from '../constants';
+import { CATEGORIES } from '../constants';
 import { Product } from '../types';
 
 interface ShopProps {
+  products: Product[];
   addToCart: (product: Product, quantity: number) => void;
 }
 
-const Shop: React.FC<ShopProps> = ({ addToCart }) => {
+const Shop: React.FC<ShopProps> = ({ products, addToCart }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState('');
@@ -23,13 +24,12 @@ const Shop: React.FC<ShopProps> = ({ addToCart }) => {
   const shopCategories = useMemo(() => ['All', ...CATEGORIES], []);
 
   const filtered = useMemo(() => {
-    const savedProducts = JSON.parse(localStorage.getItem('mvs_aqua_products') || JSON.stringify(MOCK_PRODUCTS));
-    return savedProducts.filter((p: Product) => {
+    return products.filter((p: Product) => {
       const matchCat = category === 'All' || p.category === category;
       const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
       return matchCat && matchSearch;
     });
-  }, [category, search]);
+  }, [category, search, products]);
 
   const updateLocalQty = (productId: string, delta: number) => {
     setLocalQuantities(prev => ({
