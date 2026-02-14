@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+/* Update to react-router unified package */
+import { Link } from 'react-router';
 import { ArrowRight, Zap, Shield, Droplets, LayoutGrid, CheckCircle2, Star, Sparkles, Heart } from 'lucide-react';
 import { Product } from '../types';
 

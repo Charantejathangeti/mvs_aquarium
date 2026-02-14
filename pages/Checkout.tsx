@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useNavigate, Link, Navigate } from 'react-router-dom';
+import { useNavigate, Link, Navigate } from 'react-router';
 import { ShieldCheck, Loader2, MessageCircle, Lock, Truck, ChevronLeft, CreditCard } from 'lucide-react';
 import { CartItem, Order } from '../types';
 import { WHATSAPP_NUMBER, SHIPPING_RATE_PER_KG } from '../constants';
@@ -20,7 +20,7 @@ const Checkout: React.FC<CheckoutProps> = ({ cart, clearCart }) => {
     email: '',
     address: '',
     city: '',
-    state: 'Tamil Nadu',
+    state: 'Andhra Pradesh',
     pinCode: '',
   });
 

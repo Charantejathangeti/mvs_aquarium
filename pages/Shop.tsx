@@ -1,6 +1,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+/* Update to react-router unified package */
+import { useSearchParams, Link } from 'react-router';
 import { ShoppingCart, Search, Plus, Minus, Layers, Weight, Filter, Grid3X3 } from 'lucide-react';
 import { CATEGORIES } from '../constants';
 import { Product } from '../types';

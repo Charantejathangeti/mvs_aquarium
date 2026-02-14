@@ -4,15 +4,15 @@ import { AdminConfig, Product } from './types';
 export const COLORS = {
   bg: '#ffffff',
   card: '#ffffff',
-  primary: '#0284c7', // Darker Sky Blue for contrast
-  primaryHover: '#0369a1',
-  secondary: '#db2777', // Darker Pink
-  accent: '#d97706',    // Darker Amber
+  primary: '#0369a1', // Deeper Ocean Blue
+  primaryHover: '#0c4a6e',
+  secondary: '#be185d', 
+  accent: '#b45309',    
   success: '#059669',
   warning: '#d97706',
   danger: '#dc2626',
-  textMain: '#000000', // Pure black for main text
-  textMuted: '#4b5563', // Darker gray for readability
+  textMain: '#0f172a', // Slate 900 for better readability
+  textMuted: '#64748b', // Slate 500
 };
 
 export const ADMIN_CREDENTIALS: AdminConfig = {
@@ -55,63 +55,5 @@ export const MOCK_PRODUCTS: Product[] = [
       { name: 'Red Dragon', priceModifier: 50 },
       { name: 'Mustard Gas', priceModifier: 100 }
     ]
-  },
-  {
-    id: '2',
-    name: 'Neon Tetra Schooling Set (10 Pcs)',
-    description: 'Active and peaceful community fish. These 10 pieces of high-quality Neon Tetras will bring vibrant life to any planted tank.',
-    price: 900,
-    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=1200',
-    category: 'Tetras',
-    stock: 50,
-    weight: 0.2
-  },
-  {
-    id: '3',
-    name: 'Oranda Goldfish - Red Cap',
-    description: 'High-grade Red Cap Oranda with prominent wen growth. Known for their graceful swimming and distinctive appearance.',
-    price: 1200,
-    image: 'https://images.unsplash.com/photo-1524704659690-3f7a3000bb24?auto=format&fit=crop&q=80&w=1200',
-    category: 'Goldfish',
-    stock: 8,
-    weight: 1.2,
-    variations: [
-      { name: 'Medium (3-4 inch)' },
-      { name: 'Large (5-6 inch)', priceModifier: 600 }
-    ]
-  },
-  {
-    id: '4',
-    name: 'Anubias Nana on Driftwood',
-    description: 'Ready-to-place aquatic plant. Extremely hardy and slow-growing, perfect for low-tech setups and beginners.',
-    price: 350,
-    image: 'https://images.unsplash.com/photo-1546024073-922623a8a84b?auto=format&fit=crop&q=80&w=1200',
-    category: 'Plants',
-    stock: 25,
-    weight: 0.8,
-    variations: [
-      { name: 'Standard' },
-      { name: 'XL Specimen', priceModifier: 200 }
-    ]
-  },
-  {
-    id: '5',
-    name: 'Blue Velvet Shrimp Colony (5 Pcs)',
-    description: 'Vibrant deep blue freshwater shrimps. Excellent algae eaters and a colorful addition to any nano tank.',
-    price: 750,
-    image: 'https://images.unsplash.com/photo-1520102145455-8717885b9c02?auto=format&fit=crop&q=80&w=1200',
-    category: 'Shrimps',
-    stock: 15,
-    weight: 0.1
-  },
-  {
-    id: '6',
-    name: 'Red Dragon Discus - Juveniles',
-    description: 'Stunning Pigeon Blood variant with intense red patterning. Requires stable water conditions and high-quality diet.',
-    price: 2800,
-    image: 'https://images.unsplash.com/photo-1534685785832-62fe73994362?auto=format&fit=crop&q=80&w=1200',
-    category: 'Discus',
-    stock: 6,
-    weight: 1.5
   }
 ];

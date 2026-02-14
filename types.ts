@@ -1,12 +1,14 @@
 
 export interface Variation {
   name: string;
-  priceModifier?: number; // Optional price change (e.g., +100 for Larger size)
+  priceModifier?: number; 
 }
 
 export interface Product {
   id: string;
   name: string;
+  scientificName?: string; // New: Biological nomenclature
+  careLevel?: 'Easy' | 'Moderate' | 'Advanced'; // New: Difficulty rating
   description: string;
   price: number;
   image: string;
@@ -23,7 +25,7 @@ export interface CartItem extends Product {
 
 export interface Order {
   id: string;
-  customerName: string; // Combined first + last
+  customerName: string;
   firstName: string;
   lastName: string;
   email: string;

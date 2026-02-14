@@ -1,6 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+/* Update to react-router unified package */
+import { useParams, useNavigate, Link } from 'react-router';
 import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCw, Minus, Plus, Weight, ChevronRight } from 'lucide-react';
 import { Product } from '../types';
 
@@ -26,7 +27,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center space-y-8 bg-white">
         <div className="w-24 h-24 bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300 rounded-sm">
-           <RefreshCw size={48} className="animate-spin-slow" />
+           <RefreshCw size={48} className="animate-spin" />
         </div>
         <div className="text-center">
           <h2 className="text-3xl font-black text-slate-900 mb-2 uppercase tracking-tighter">Species Not Found</h2>
@@ -56,7 +57,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
           <ChevronRight size={10} />
           <Link to="/shop" className="hover:text-black transition-colors">Stock</Link>
           <ChevronRight size={10} />
-          <span className="text-black">{product.name}</span>
+          <span className="text-black uppercase">{product.name}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20">
@@ -96,7 +97,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
             </div>
 
             {/* Variation Selector */}
-            {product.variations && (
+            {product.variations && product.variations.length > 0 && (
               <div className="mb-10 animate-fade-in">
                 <h3 className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Select Configuration</h3>
                 <div className="flex flex-wrap gap-2">
@@ -147,46 +148,35 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ products, addToCart }) =>
                 </div>
 
                 <div className="flex flex-col space-y-1">
-                  <div className="flex items-center space-x-2 text-emerald-600">
+                  <div className="flex items-center space-x-2 text-emerald-600 mb-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">In Stock Ready</span>
+                    <span className="text-[9px] font-black uppercase tracking-widest">Available for Shipment</span>
                   </div>
-                  <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">{product.stock} units available</p>
+                  <button 
+                    onClick={handleAddToCart}
+                    className="px-12 py-5 bg-black text-white font-black rounded-sm hover:bg-sky-600 transition-all flex items-center justify-center gap-3 text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-slate-200 active:scale-[0.98]"
+                  >
+                    <ShoppingCart size={18} />
+                    <span>Add to Basket</span>
+                  </button>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button 
-                  onClick={handleAddToCart}
-                  className="flex-grow py-4 bg-black hover:bg-sky-600 text-white font-black rounded-sm flex items-center justify-center space-x-4 transition-all shadow-xl shadow-black/5"
-                >
-                  <ShoppingCart size={16} />
-                  <span className="text-[10px] uppercase tracking-widest">Add to Consignment</span>
-                </button>
-                <Link 
-                  to="/shop" 
-                  className="px-8 py-4 bg-white border border-slate-200 text-black font-black rounded-sm hover:border-black transition-all flex items-center justify-center text-[10px] uppercase tracking-widest"
-                >
-                  Return to Stocklist
-                </Link>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12 pt-12 border-t border-slate-100">
-              <div className="flex flex-col items-center text-center p-6 bg-slate-50 border border-slate-100 rounded-sm">
-                <ShieldCheck size={20} className="text-sky-600 mb-3" />
-                <h4 className="text-black font-black text-[8px] uppercase tracking-widest mb-1">Health Check</h4>
-                <p className="text-slate-400 text-[8px] font-bold uppercase">100% Quarantine Pass</p>
-              </div>
-              <div className="flex flex-col items-center text-center p-6 bg-slate-50 border border-slate-100 rounded-sm">
-                <Truck size={20} className="text-sky-600 mb-3" />
-                <h4 className="text-black font-black text-[8px] uppercase tracking-widest mb-1">Safe Transit</h4>
-                <p className="text-slate-400 text-[8px] font-bold uppercase">Oxygen Packed</p>
-              </div>
-              <div className="flex flex-col items-center text-center p-6 bg-slate-50 border border-slate-100 rounded-sm">
-                <RefreshCw size={20} className="text-sky-600 mb-3" />
-                <h4 className="text-black font-black text-[8px] uppercase tracking-widest mb-1">DOA Policy</h4>
-                <p className="text-slate-400 text-[8px] font-bold uppercase">45% Valuation Refund</p>
+              <div className="grid grid-cols-2 gap-4 pt-8 border-t border-slate-100">
+                <div className="flex items-center gap-4">
+                  <ShieldCheck className="text-sky-600" size={20} />
+                  <div>
+                    <p className="text-[9px] font-black uppercase text-black tracking-widest">Guaranteed Life</p>
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Verified Healthy</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <Truck className="text-sky-600" size={20} />
+                  <div>
+                    <p className="text-[9px] font-black uppercase text-black tracking-widest">Cold Chain Transit</p>
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">Mon Dispatch</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

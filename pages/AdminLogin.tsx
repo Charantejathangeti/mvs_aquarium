@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { ShieldAlert, ArrowLeft, Loader2, Lock, Fish, ChevronRight } from 'lucide-react';
-import { ADMIN_CREDENTIALS } from '../constants';
+import { useNavigate, Link } from 'react-router';
+import { ShieldAlert, ArrowLeft, Loader2, Lock, ChevronRight, User } from 'lucide-react';
+import { ADMIN_CREDENTIALS } from '../constants.ts';
 
 const AdminLogin: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -27,79 +27,57 @@ const AdminLogin: React.FC = () => {
         sessionStorage.setItem('mvs_aqua_admin', '1');
         navigate('/admin');
       } else {
-        setError('Verification failed. Invalid credentials.');
+        setError('ACCESS DENIED: VERIFICATION FAILED.');
         setIsLoading(false);
       }
     }, 1200);
   };
 
-  // Generate dynamic fish elements with varying behaviors
-  const fishes = Array.from({ length: 15 }).map((_, i) => ({
-    id: i,
-    left: `${Math.random() * 100}%`,
-    bottom: `${-10 - Math.random() * 20}%`,
-    delay: `${Math.random() * 8}s`,
-    duration: `${6 + Math.random() * 6}s`,
-    size: 20 + Math.random() * 30,
-    opacity: 0.1 + Math.random() * 0.3,
-    type: i % 3 === 0 ? 'jump' : 'swim',
-    flip: Math.random() > 0.5,
-  }));
-
   return (
-    <div className="relative min-h-screen bg-sky-50 flex items-center justify-center p-6 overflow-hidden">
-      {/* Dynamic Aquatic Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        {fishes.map((fish) => (
-          <div
-            key={fish.id}
-            className={`absolute ${fish.type === 'jump' ? 'animate-fish-jump' : 'animate-fish-swim'}`}
-            style={{
-              left: fish.left,
-              bottom: fish.bottom,
-              animationDelay: fish.delay,
-              animationDuration: fish.duration,
-              opacity: fish.opacity,
-              transform: fish.flip ? 'scaleX(-1)' : 'none',
-            }}
-          >
-            <Fish size={fish.size} className="text-sky-400 fill-sky-200" />
-          </div>
-        ))}
-        {/* Subtle water surface effect */}
-        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent opacity-60" />
-      </div>
+    <div className="relative min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 via-emerald-500 to-sky-500 animate-pulse" />
+      
+      <div className="w-full max-w-xs z-10 animate-fade-in transition-all duration-700 transform">
+        {/* Simple Back Link */}
+        <Link to="/" className="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-black mb-6 transition-colors group">
+          <ArrowLeft size={12} className="group-hover:-translate-x-1 transition-transform" />
+          <span>Exit to Terminal</span>
+        </Link>
 
-      {/* Login Card - High Contrast & Professional */}
-      <div className="relative z-10 w-full max-w-sm animate-fade-in">
-        <div className="bg-white/95 backdrop-blur-sm border border-slate-200 rounded-sm p-8 shadow-2xl shadow-sky-900/10">
+        <div className="bg-white border border-slate-200 rounded-sm p-8 shadow-2xl animate-[slide-up_0.6s_ease-out]">
           <div className="text-center mb-8">
-            <div className="w-12 h-12 bg-black text-white flex items-center justify-center mx-auto mb-4 rounded-sm shadow-lg">
-              <Lock size={20} />
+            <div className="w-10 h-10 bg-black text-white flex items-center justify-center mx-auto mb-4 rounded-sm shadow-xl">
+              <Lock size={16} />
             </div>
-            <h1 className="text-xl font-black text-black uppercase tracking-widest">Operator Portal</h1>
-            <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-1">MVS Aqua Enterprise Management</p>
+            <h1 className="text-lg font-black text-black uppercase tracking-[0.2em]">ADMIN <span className="text-sky-600">CONSOLE</span></h1>
+            <p className="text-slate-400 text-[8px] font-black uppercase tracking-widest mt-1.5">Authorization Required</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Identity UID</label>
+              <label className="text-[7px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                <User size={8} />
+                OPERATOR ID
+              </label>
               <input
                 type="text"
                 required
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-sm text-black font-bold focus:outline-none focus:border-black focus:ring-4 focus:ring-black/5 text-xs transition-all"
-                placeholder="admin"
+                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-sm text-black font-bold focus:outline-none focus:border-black focus:bg-white transition-all text-[10px]"
+                placeholder="UID..."
                 value={username}
                 onChange={e => setUsername(e.target.value)}
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Secure Access Code</label>
+              <label className="text-[7px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                <Lock size={8} />
+                SECURE KEY
+              </label>
               <input
                 type="password"
                 required
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-sm text-black font-bold focus:outline-none focus:border-black focus:ring-4 focus:ring-black/5 text-xs transition-all"
+                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-sm text-black font-bold focus:outline-none focus:border-black focus:bg-white transition-all text-[10px]"
                 placeholder="••••••••"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
@@ -107,7 +85,7 @@ const AdminLogin: React.FC = () => {
             </div>
 
             {error && (
-              <div className="p-3 bg-red-50 text-red-600 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 rounded-sm border border-red-100 animate-shake">
+              <div className="p-2 bg-red-50 text-red-600 text-[7px] font-black uppercase tracking-widest flex items-center gap-2 rounded-sm border border-red-100 animate-shake">
                 <ShieldAlert size={12} />
                 <span>{error}</span>
               </div>
@@ -116,60 +94,36 @@ const AdminLogin: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-4 bg-black hover:bg-sky-700 text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-sm transition-all flex items-center justify-center gap-3 disabled:opacity-50 group"
+              className="w-full py-3 bg-black hover:bg-sky-600 text-white font-black text-[9px] uppercase tracking-[0.3em] rounded-sm transition-all flex items-center justify-center gap-3 disabled:opacity-50 active:scale-[0.98] shadow-lg"
             >
               {isLoading ? (
-                <Loader2 className="animate-spin" size={16} />
+                <Loader2 className="animate-spin" size={14} />
               ) : (
                 <>
-                  <span>Initialize Session</span>
-                  <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  <span>LOGIN</span>
+                  <ChevronRight size={12} />
                 </>
               )}
             </button>
           </form>
-          
-          <div className="mt-8 flex items-center justify-center gap-2">
-            <div className="h-px w-8 bg-slate-100" />
-            <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest">End-to-End Encrypted</span>
-            <div className="h-px w-8 bg-slate-100" />
-          </div>
         </div>
 
         <div className="mt-8 text-center">
-          <Link to="/" className="text-slate-400 hover:text-black transition-colors text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 group">
-            <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-            <span>Return to Stocklist</span>
-          </Link>
+          <p className="text-[7px] font-black text-slate-300 uppercase tracking-[0.5em]">MVS AQUA HUB · TIRUPATI</p>
         </div>
       </div>
 
       <style>{`
-        @keyframes fish-jump {
-          0% { transform: translateY(0) rotate(0deg); bottom: -10%; }
-          30% { transform: translateY(-300px) rotate(-45deg); bottom: 40%; }
-          60% { transform: translateY(-300px) rotate(45deg); bottom: 40%; }
-          100% { transform: translateY(0) rotate(180deg); bottom: -10%; }
-        }
-        @keyframes fish-swim {
-          0% { transform: translateX(-100px) translateY(0); }
-          50% { transform: translateX(100px) translateY(-20px); }
-          100% { transform: translateX(-100px) translateY(0); }
-        }
-        .animate-fish-jump {
-          animation: fish-jump linear infinite;
-        }
-        .animate-fish-swim {
-          animation: fish-swim ease-in-out infinite;
+        @keyframes slide-up {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-4px); }
           75% { transform: translateX(4px); }
         }
-        .animate-shake {
-          animation: shake 0.2s ease-in-out 0s 2;
-        }
+        .animate-shake { animation: shake 0.2s ease-in-out 0s 2; }
       `}</style>
     </div>
   );
