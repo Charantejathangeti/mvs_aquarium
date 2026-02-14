@@ -1,8 +1,7 @@
 
 import React from 'react';
-/* Update to react-router unified package */
 import { Link } from 'react-router';
-import { ArrowRight, Zap, Shield, Droplets, LayoutGrid, CheckCircle2, Star, Sparkles, Heart } from 'lucide-react';
+import { ArrowRight, Zap, Shield, Droplets, CheckCircle2, Star, Heart } from 'lucide-react';
 import { Product } from '../types';
 
 interface HomeProps {
@@ -17,12 +16,10 @@ const Home: React.FC<HomeProps> = ({ products }) => {
     { name: 'Plants', image: 'https://images.unsplash.com/photo-1546024073-922623a8a84b?auto=format&fit=crop&q=80&w=400' }
   ];
 
-  // Show latest 4 products from the live state
   const featured = products.slice(-4).reverse();
 
   return (
     <div className="space-y-12 pb-20">
-      {/* Hero - Cinematic Background */}
       <section className="relative min-h-[70vh] flex items-center pt-8 pb-10 px-4 bg-slate-900 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
            <img src="https://images.unsplash.com/photo-1534685785832-62fe73994362?auto=format&fit=crop&q=80&w=1920" className="w-full h-full object-cover" alt="Background" />
@@ -63,7 +60,6 @@ const Home: React.FC<HomeProps> = ({ products }) => {
         </div>
       </section>
 
-      {/* Trust Badges - Enhanced */}
       <section className="max-w-7xl mx-auto px-4 -mt-20 relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="p-8 bg-white border border-slate-200 rounded-sm flex flex-col gap-4 shadow-2xl shadow-slate-900/5">
@@ -90,7 +86,6 @@ const Home: React.FC<HomeProps> = ({ products }) => {
         </div>
       </section>
 
-      {/* Featured Collections - Grid */}
       <section className="max-w-7xl mx-auto px-4 pt-12">
         <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-4">
            <div>
@@ -113,7 +108,6 @@ const Home: React.FC<HomeProps> = ({ products }) => {
         </div>
       </section>
 
-      {/* Latest Specimens */}
       <section className="bg-slate-50 py-24">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
@@ -143,7 +137,6 @@ const Home: React.FC<HomeProps> = ({ products }) => {
         </div>
       </section>
 
-      {/* Detailed Values - Row */}
       <section className="max-w-7xl mx-auto px-4 py-12">
          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <div className="space-y-8">

@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import { 
-  Search, Package, Truck, CheckCircle2, MapPin, 
-  ExternalLink, AlertTriangle, ShieldCheck, Box, 
-  Calendar, Clock, Circle, Map, HelpCircle
+  Search, Truck, CheckCircle2, 
+  ExternalLink, AlertTriangle, Box, 
+  Clock, Circle, HelpCircle
 } from 'lucide-react';
 import { WHATSAPP_NUMBER } from '../constants';
 
@@ -39,7 +39,6 @@ const Tracking: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
-      {/* Search Header */}
       <div className="bg-slate-900 text-white py-16 px-4 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-1/3 h-full bg-sky-500/5 skew-x-[-20deg] translate-x-1/2" />
         <div className="max-w-4xl mx-auto relative z-10">
@@ -74,7 +73,6 @@ const Tracking: React.FC = () => {
       <div className="max-w-4xl mx-auto px-4 -mt-8">
         {result ? (
           <div className="space-y-6 animate-fade-in pb-24">
-            {/* Summary Strip */}
             <div className="bg-white border border-slate-200 p-6 rounded-sm shadow-sm grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
               <div className="space-y-1">
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Order ID</p>
@@ -97,7 +95,6 @@ const Tracking: React.FC = () => {
               </div>
             </div>
 
-            {/* Detailed Timeline */}
             <div className="bg-white border border-slate-200 rounded-sm shadow-sm overflow-hidden">
                <div className="px-8 py-5 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
                   <div className="flex items-center gap-3">
@@ -110,13 +107,10 @@ const Tracking: React.FC = () => {
                </div>
 
                <div className="p-10 relative">
-                  {/* The Timeline Line */}
                   <div className="absolute left-[47px] top-12 bottom-12 w-px bg-slate-100 hidden sm:block" />
-
                   <div className="space-y-12 relative">
                      {result.history.map((step: any, i: number) => (
                        <div key={i} className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-12">
-                          {/* Circle Icon */}
                           <div className={`relative z-10 w-8 h-8 rounded-sm border-2 flex items-center justify-center shrink-0 transition-all ${
                             step.status === 'completed' ? 'bg-slate-900 border-slate-900 text-white' : 
                             step.status === 'active' ? 'bg-white border-sky-600 text-sky-600 shadow-lg shadow-sky-100' : 
@@ -127,7 +121,6 @@ const Tracking: React.FC = () => {
                              <Circle size={6} fill="currentColor" />}
                           </div>
 
-                          {/* Event Text */}
                           <div className="flex-grow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full">
                              <div className="space-y-1">
                                 <h4 className={`text-sm font-black uppercase tracking-tight ${step.status === 'pending' ? 'text-slate-300' : 'text-slate-900'}`}>{step.event}</h4>
@@ -135,9 +128,6 @@ const Tracking: React.FC = () => {
                              </div>
                              <div className="text-right flex flex-col items-start sm:items-end">
                                 <span className={`text-[11px] font-black uppercase ${step.status === 'pending' ? 'text-slate-200' : 'text-slate-400'}`}>{step.date}</span>
-                                {step.status === 'active' && (
-                                   <span className="text-[9px] font-black text-sky-600 bg-sky-50 px-2 py-0.5 rounded-sm uppercase tracking-widest mt-1">Live Update</span>
-                                )}
                              </div>
                           </div>
                        </div>
@@ -146,7 +136,6 @@ const Tracking: React.FC = () => {
                </div>
             </div>
 
-            {/* Assistance Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                <div className="bg-white border border-slate-200 p-8 rounded-sm space-y-4">
                   <div className="flex items-center gap-3 text-slate-900">
@@ -163,7 +152,7 @@ const Tracking: React.FC = () => {
                      <h3 className="text-[11px] font-black uppercase tracking-widest">Customer Support</h3>
                   </div>
                   <p className="text-[11px] font-bold text-slate-500 uppercase leading-relaxed">
-                    Need help with unboxing or have a logistics question? Connect with our Tirupati team via WhatsApp for real-time assistance.
+                    Need help with unboxing? Connect with our Tirupati team via WhatsApp for real-time assistance.
                   </p>
                   <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="text-[11px] font-black text-sky-600 uppercase tracking-widest hover:underline block pt-2">
                     Message Support Team

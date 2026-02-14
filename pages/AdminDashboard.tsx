@@ -3,30 +3,27 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { 
   LayoutDashboard, Trash2, Search, LogOut, 
-  X, PlusCircle, Image as ImageIcon, Camera, Edit2, 
-  Trash, Box, Plus, Download, FileText, RefreshCw, 
-  AlertCircle, CheckCircle, PackageCheck, Zap, Globe, ExternalLink,
-  Truck, ClipboardList, CreditCard, UserCheck, Settings, Printer, Phone, MapPin, Menu, Info, Layers,
-  ChevronRight, ArrowRight
+  X, Image as ImageIcon, Edit2, 
+  Box, Plus, FileText, RefreshCw, 
+  CheckCircle, PackageCheck, Truck, ClipboardList, 
+  CreditCard, UserCheck, Printer, Phone, MapPin, Menu, Layers
 } from 'lucide-react';
-import { CATEGORIES } from '../constants.ts';
-import { Product, Order, Variation } from '../types.ts';
+import { CATEGORIES } from '../constants';
+import { Product, Order, Variation } from '../types';
 
 interface AdminDashboardProps {
   products: Product[];
   setProducts: (products: Product[]) => void;
 }
 
-const GLOBAL_SYNC_BIN = '043f82e16fdf9e246988';
-
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }) => {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeTab, setActiveTab] = useState<'Dashboard' | 'Products' | 'Orders' | 'Invoices'>('Dashboard');
   const [orders, setOrders] = useState<Order[]>([]);
-  const [syncStatus, setSyncStatus] = useState<'idle' | 'saving' | 'synced' | 'local-master'>('synced');
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -54,29 +51,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
     setOrders(savedOrders);
   }, [navigate]);
 
-  const handleForceSync = async () => {
-    if (syncStatus === 'saving') return;
-    setSyncStatus('saving');
-    try {
-      const response = await fetch(`https://api.npoint.io/${GLOBAL_SYNC_BIN}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(products)
-      });
-      if (response.ok) {
-        setSyncStatus('synced');
-        setShowSuccessToast(true);
-        setTimeout(() => setShowSuccessToast(false), 3000);
-      } else { setSyncStatus('local-master'); }
-    } catch (err) { setSyncStatus('local-master'); }
-  };
-
-  useEffect(() => {
-    if (products.length === 0) return;
-    const timer = setTimeout(handleForceSync, 15000); 
-    return () => clearTimeout(timer);
-  }, [products]);
-
   const stats = useMemo(() => {
     const totalStock = products.reduce((acc, p) => acc + (p.stock || 0), 0);
     const activeOrders = orders.filter(o => o.status !== 'delivered' && o.status !== 'cancelled').length;
@@ -89,16 +63,26 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
     navigate('/admin-login');
   };
 
-  const handleSaveProduct = (e: React.FormEvent) => {
+  const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSaving(true);
+    let updatedProducts: Product[];
+    
     if (editingProduct) {
-      const updated = products.map(p => p.id === editingProduct.id ? { ...p, ...productForm } : p);
-      setProducts(updated);
+      updatedProducts = products.map(p => p.id === editingProduct.id ? { ...p, ...productForm } : p);
     } else {
-      const newProduct: Product = { ...productForm, id: 'MVS-' + Math.floor(1000 + Math.random() * 9000) };
-      setProducts([...products, newProduct]);
+      const newProduct: Product = { 
+        ...productForm, 
+        id: 'MVS-' + Math.floor(1000 + Math.random() * 9000) 
+      };
+      updatedProducts = [...products, newProduct];
     }
+    
+    await setProducts(updatedProducts); 
+    setIsSaving(false);
     setIsProductModalOpen(false);
+    setShowSuccessToast(true);
+    setTimeout(() => setShowSuccessToast(false), 3000);
   };
 
   const generateManualInvoice = (e: React.FormEvent) => {
@@ -136,14 +120,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
         </div>
       )}
 
-      {/* Sidebar - Professional Console */}
+      {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 transform transition-transform duration-300 md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="p-8 border-b border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-sky-600 text-white font-black flex items-center justify-center rounded-md text-base">M</div>
             <span className="font-extrabold text-white text-lg tracking-tight">Admin Console</span>
           </div>
-          <button onClick={() => setIsSidebarOpen(false)} className="md:hidden p-2"><X size={24}/></button>
+          <button onClick={() => setIsSidebarOpen(false)} className="md:hidden p-2 text-white"><X size={24}/></button>
         </div>
 
         <nav className="p-4 space-y-2 mt-6">
@@ -176,13 +160,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
 
       {/* Main Container */}
       <main className="flex-grow flex flex-col min-w-0 h-screen overflow-hidden">
-        {/* Module Header Bar */}
         <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-10 shrink-0 z-10 shadow-sm">
           <div className="flex items-center gap-4">
             <button onClick={() => setIsSidebarOpen(true)} className="md:hidden p-2 text-slate-500"><Menu size={24}/></button>
             <div className="flex flex-col">
               <span className="font-extrabold text-slate-900 text-2xl leading-none">{activeTab}</span>
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">MVS Aqua Management</span>
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Store Management</span>
             </div>
           </div>
           <div className="flex items-center gap-6">
@@ -199,22 +182,20 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
                 </button>
              )}
              <div className="flex items-center gap-3 pl-6 border-l border-slate-200">
-               <div className={`w-2.5 h-2.5 rounded-full ${syncStatus === 'saving' ? 'bg-sky-500 animate-pulse' : 'bg-emerald-500'}`} />
-               <span className="text-slate-500 font-bold text-xs uppercase tracking-widest">{syncStatus === 'saving' ? 'Syncing...' : 'Online'}</span>
+               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+               <span className="text-slate-500 font-bold text-xs uppercase tracking-widest">Global Cloud Connected</span>
              </div>
           </div>
         </header>
 
-        {/* Content Area */}
         <div className="flex-grow overflow-y-auto p-8 md:p-12 bg-slate-50">
-          
           {activeTab === 'Dashboard' && (
             <div className="space-y-8 max-w-6xl">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                 {[
-                  { label: 'Inventory Total', value: products.length, icon: Box, color: 'text-slate-900' },
-                  { label: 'Pending Shipments', value: stats.activeOrders, icon: Truck, color: 'text-sky-600' },
-                  { label: 'Store Revenue', value: `₹${stats.revenue.toLocaleString()}`, icon: CreditCard, color: 'text-emerald-600' }
+                  { label: 'Total Stocked Species', value: products.length, icon: Box, color: 'text-slate-900' },
+                  { label: 'Active Order Flow', value: stats.activeOrders, icon: Truck, color: 'text-sky-600' },
+                  { label: 'Cumulative Revenue', value: `₹${stats.revenue.toLocaleString()}`, icon: CreditCard, color: 'text-emerald-600' }
                 ].map((s, i) => (
                   <div key={i} className="bg-white p-8 border border-slate-200 rounded-md shadow-sm flex items-center justify-between group hover:border-sky-500/30 transition-all">
                     <div className="space-y-1">
@@ -230,7 +211,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
 
               <div className="bg-white border border-slate-200 rounded-md overflow-hidden shadow-sm">
                  <div className="px-8 py-5 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-                    <h4 className="font-bold text-slate-600 text-xs uppercase tracking-widest">Recent Activity</h4>
+                    <h4 className="font-bold text-slate-600 text-xs uppercase tracking-widest">Live Activity Log</h4>
                     <RefreshCw size={16} className="text-slate-300 animate-spin-slow cursor-pointer hover:text-slate-500 transition-colors"/>
                  </div>
                  <div className="divide-y divide-slate-100">
@@ -285,7 +266,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
                       <td className="px-8 py-5 text-right">
                         <div className="flex justify-end gap-3 opacity-30 group-hover:opacity-100 transition-all">
                           <button onClick={() => { setEditingProduct(p); setProductForm({...p, variations: p.variations || []} as any); setIsProductModalOpen(true); }} className="p-2.5 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-md transition-colors"><Edit2 size={20} /></button>
-                          <button onClick={() => { if(confirm('Delete this product?')) setProducts(products.filter(i=>i.id!==p.id)) }} className="p-2.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"><Trash2 size={20} /></button>
+                          <button onClick={() => { if(confirm('Permanently delete this item?')) setProducts(products.filter(i=>i.id!==p.id)) }} className="p-2.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"><Trash2 size={20} /></button>
                         </div>
                       </td>
                     </tr>
@@ -331,7 +312,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
                 <div className="bg-white border border-slate-200 p-10 rounded-md shadow-sm">
                   <div className="flex items-center gap-3 mb-8 border-b border-slate-100 pb-4">
                     <UserCheck size={24} className="text-sky-600" />
-                    <h3 className="font-extrabold text-slate-900 text-sm uppercase tracking-wider">Customer Information</h3>
+                    <h3 className="font-extrabold text-slate-900 text-sm uppercase tracking-wider">Customer Details</h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="grid grid-cols-2 gap-4">
@@ -345,17 +326,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                       <label className="text-[10px] font-bold text-slate-400 uppercase">Phone Number</label>
+                       <label className="text-[10px] font-bold text-slate-400 uppercase">Mobile Number</label>
                        <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 px-5 py-4 rounded-md focus-within:border-slate-900 transition-all">
                           <Phone size={18} className="text-slate-300"/>
                           <input required type="tel" className="w-full bg-transparent font-bold outline-none text-sm" placeholder="Phone Number" value={invoiceForm.phone} onChange={e => setInvoiceForm({...invoiceForm, phone: e.target.value})} />
-                       </div>
-                    </div>
-                    <div className="md:col-span-2 space-y-1.5">
-                       <label className="text-[10px] font-bold text-slate-400 uppercase">Shipping Address</label>
-                       <div className="flex items-start gap-3 bg-slate-50 border border-slate-200 px-5 py-4 rounded-md focus-within:border-slate-900 transition-all">
-                          <MapPin size={18} className="text-slate-300 mt-1"/>
-                          <textarea required rows={2} className="w-full bg-transparent font-bold outline-none resize-none text-sm leading-relaxed" placeholder="Complete Shipping Address" value={invoiceForm.address} onChange={e => setInvoiceForm({...invoiceForm, address: e.target.value})} />
                        </div>
                     </div>
                   </div>
@@ -365,12 +339,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
                   <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
                     <div className="flex items-center gap-3">
                       <ClipboardList size={24} className="text-sky-600" />
-                      <h3 className="font-extrabold text-slate-900 text-sm uppercase tracking-wider">Item Details</h3>
+                      <h3 className="font-extrabold text-slate-900 text-sm uppercase tracking-wider">Order Items</h3>
                     </div>
                     <button type="button" onClick={() => setInvoiceForm({...invoiceForm, items: [...invoiceForm.items, { id: 'manual-' + Date.now(), name: '', quantity: 1, price: 0, weight: 0 }]})} className="px-6 py-2 border border-sky-100 text-sky-600 bg-sky-50/50 font-bold uppercase text-[10px] tracking-wider rounded-md hover:bg-sky-100 transition-all shadow-sm">+ Add Row</button>
                   </div>
                   <div className="space-y-4">
-                    {invoiceForm.items.map((item, idx) => (
+                    {invoiceForm.items.map((item) => (
                       <div key={item.id} className="grid grid-cols-12 gap-5 items-center bg-slate-50 p-4 rounded-md border border-slate-100 group">
                         <div className="col-span-6 md:col-span-5">
                           <input required placeholder="Item Description" className="w-full bg-white px-4 py-3 border border-slate-200 font-bold rounded-md outline-none focus:border-slate-900 transition-all text-sm" value={item.name} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, name: e.target.value } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
@@ -381,29 +355,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
                         <div className="col-span-2 md:col-span-2">
                           <input required type="number" placeholder="Price" className="w-full bg-white px-3 py-3 border border-slate-200 font-bold rounded-md text-center text-sm" value={item.price} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, price: parseInt(e.target.value)||0 } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
                         </div>
-                        <div className="col-span-1 md:col-span-2 hidden md:block">
-                          <input required type="number" step="0.01" placeholder="Weight" className="w-full bg-white px-3 py-3 border border-slate-200 font-bold rounded-md text-center text-sm" value={item.weight} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, weight: parseFloat(e.target.value)||0 } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
-                        </div>
                         <div className="col-span-1 flex justify-end opacity-0 group-hover:opacity-100 transition-all">
                           <button type="button" onClick={() => { if(invoiceForm.items.length > 1) setInvoiceForm({...invoiceForm, items: invoiceForm.items.filter(i=>i.id!==item.id)}) }} className="p-2 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={20}/></button>
                         </div>
                       </div>
                     ))}
-                  </div>
-                  <div className="mt-10 flex flex-col sm:flex-row justify-between items-center gap-8 border-t border-slate-100 pt-8">
-                    <div className="flex items-center gap-4">
-                        <label className="font-bold text-slate-400 uppercase text-[10px] tracking-widest">Tax (GST)</label>
-                        <select className="bg-slate-100 border border-slate-200 px-4 py-2 font-bold rounded-md text-xs" value={invoiceForm.taxRate} onChange={e => setInvoiceForm({...invoiceForm, taxRate: parseInt(e.target.value)})}>
-                           <option value="0">0%</option>
-                           <option value="5">5%</option>
-                           <option value="12">12%</option>
-                           <option value="18">18%</option>
-                        </select>
-                    </div>
-                    <div className="text-right">
-                       <p className="font-bold text-slate-400 uppercase text-[10px] tracking-widest mb-1">Total Payable</p>
-                       <p className="text-4xl font-black text-slate-900 tracking-tighter">₹{(invoiceForm.items.reduce((acc, i) => acc + (i.price * i.quantity), 0) + (invoiceForm.items.reduce((acc, i) => acc + (i.price * i.quantity), 0) * invoiceForm.taxRate / 100)).toLocaleString()}</p>
-                    </div>
                   </div>
                   <button type="submit" className="w-full mt-12 py-5 bg-slate-900 text-white font-black uppercase tracking-[0.3em] rounded-md hover:bg-sky-600 transition-all flex items-center justify-center gap-3 shadow-xl text-sm">
                      <Printer size={20} />
@@ -426,9 +382,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
                <div className="p-3 bg-sky-50 rounded-lg"><Layers size={28} className="text-sky-600" /></div>
                <div>
                   <h2 className="text-2xl font-black text-slate-900">
-                    {editingProduct ? 'Edit Product' : 'Add New Product'}
+                    {editingProduct ? 'Edit Specimen' : 'Add New Specimen'}
                   </h2>
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Inventory Management Portal</p>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Global Inventory Registry</p>
                </div>
             </div>
             
@@ -451,26 +407,16 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
                          </select>
                       </div>
                       <div className="space-y-1.5">
-                         <label className="text-[10px] font-bold text-slate-400 uppercase">Care Level</label>
-                         <select className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-bold rounded-md text-xs" value={productForm.careLevel} onChange={e => setProductForm({...productForm, careLevel: e.target.value as any})}>
-                            <option value="Easy">Easy</option>
-                            <option value="Moderate">Moderate</option>
-                            <option value="Advanced">Advanced</option>
-                         </select>
+                         <label className="text-[10px] font-bold text-slate-400 uppercase">Stock Count *</label>
+                         <input type="number" required className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md text-sm" value={productForm.stock} onChange={e => setProductForm({...productForm, stock: parseInt(e.target.value)||0})} />
                       </div>
                    </div>
                 </div>
 
                 <div className="space-y-5">
-                   <div className="grid grid-cols-2 gap-5">
-                      <div className="space-y-1.5">
-                         <label className="text-[10px] font-bold text-slate-400 uppercase">Price (₹) *</label>
-                         <input type="number" required className="w-full bg-white border border-sky-100 px-5 py-4 font-black text-sky-600 rounded-md outline-none text-base" value={productForm.price} onChange={e => setProductForm({...productForm, price: parseInt(e.target.value)||0})} />
-                      </div>
-                      <div className="space-y-1.5">
-                         <label className="text-[10px] font-bold text-slate-400 uppercase">Stock *</label>
-                         <input type="number" required className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md text-sm" value={productForm.stock} onChange={e => setProductForm({...productForm, stock: parseInt(e.target.value)||0})} />
-                      </div>
+                   <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold text-slate-400 uppercase">Price (₹) *</label>
+                      <input type="number" required className="w-full bg-white border border-sky-100 px-5 py-4 font-black text-sky-600 rounded-md outline-none text-base" value={productForm.price} onChange={e => setProductForm({...productForm, price: parseInt(e.target.value)||0})} />
                    </div>
                    <div className="space-y-1.5">
                       <label className="text-[10px] font-bold text-slate-400 uppercase">Weight per Unit (kg) *</label>
@@ -499,13 +445,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
                 </div>
               </div>
 
-              <div className="space-y-1.5">
-                 <label className="text-[10px] font-bold text-slate-400 uppercase">Description</label>
-                 <textarea required rows={4} className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-medium rounded-md resize-none outline-none focus:border-slate-900 transition-all text-sm leading-relaxed" placeholder="Species details, care instructions, etc..." value={productForm.description} onChange={e => setProductForm({...productForm, description: e.target.value})} />
-              </div>
-
-              <button type="submit" className="w-full py-5 bg-sky-600 text-white font-black uppercase tracking-[0.2em] rounded-md hover:bg-sky-700 transition-all shadow-2xl active:scale-[0.98] text-sm mt-4">
-                {editingProduct ? 'Save Changes' : 'Confirm and List'}
+              <button 
+                type="submit" 
+                disabled={isSaving}
+                className="w-full py-5 bg-sky-600 text-white font-black uppercase tracking-[0.2em] rounded-md hover:bg-sky-700 transition-all shadow-2xl active:scale-[0.98] text-sm mt-4 disabled:opacity-50"
+              >
+                {isSaving ? 'Synchronizing Cloud...' : editingProduct ? 'Save and Sync Changes' : 'Confirm and Publish Globally'}
               </button>
             </form>
           </div>
@@ -515,10 +460,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
       <style>{`
         .animate-spin-slow { animation: spin 4s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
       `}</style>
     </div>
   );
