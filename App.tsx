@@ -18,7 +18,7 @@ import { MOCK_PRODUCTS } from './constants';
 
 /**
  * MVS GLOBAL MASTER REGISTRY (Cloud Database)
- * Using npoint.io as a serverless JSON registry for global consistency.
+ * Using npoint.io as a reliable serverless JSON registry.
  */
 const DATABASE_URI = 'https://api.npoint.io/043f82e16fdf9e246988';
 
@@ -41,9 +41,8 @@ const App: React.FC = () => {
     }
   });
 
-  // MASTER FETCH: The "Shared Brain" mechanism
   const fetchGlobalRegistry = useCallback(async (isInitial = false) => {
-    // Prevent fetching if we are currently pushing data
+    // Block fetch if we are currently in the middle of a push operation
     if (isSyncingRef.current) return;
 
     setCloudStatus('syncing');
@@ -62,25 +61,23 @@ const App: React.FC = () => {
           setOrders([]);
         }
         setCloudStatus('online');
-        setLastSyncTime('READY-TO-INIT');
+        setLastSyncTime('STANDBY');
         return true;
       }
 
       if (response.ok) {
         const data = await response.json();
-        if (data && typeof data === 'object') {
-          // Only update if we are not currently in a push operation
-          if (!isSyncingRef.current) {
-            if (Array.isArray(data.products)) setProducts(data.products);
-            if (Array.isArray(data.orders)) setOrders(data.orders);
-          }
+        // Double check we didn't start syncing during the fetch request
+        if (data && typeof data === 'object' && !isSyncingRef.current) {
+          if (Array.isArray(data.products)) setProducts(data.products);
+          if (Array.isArray(data.orders)) setOrders(data.orders);
           
           setCloudStatus('online');
           setLastSyncTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
           return true;
         }
       }
-      throw new Error(`Cloud Connectivity Warning: ${response.status}`);
+      throw new Error(`Connectivity Warning: ${response.status}`);
     } catch (err) {
       setCloudStatus('offline');
       if (isInitial && products.length === 0) setProducts(MOCK_PRODUCTS);
@@ -88,12 +85,11 @@ const App: React.FC = () => {
     }
   }, [products.length]);
 
-  // MASTER COMMIT: Push changes to the cloud with Optimistic UI updates
   const pushToGlobalRegistry = async (newProducts: Product[], newOrders: Order[]) => {
     isSyncingRef.current = true;
     setCloudStatus('syncing');
     
-    // 1. Optimistic Update (Instant local feedback)
+    // Optimistic Local Update
     setProducts(newProducts);
     setOrders(newOrders);
 
@@ -119,9 +115,8 @@ const App: React.FC = () => {
         isSyncingRef.current = false;
         return true;
       }
-      throw new Error("Registry Write Denied");
+      throw new Error("Commit Access Denied");
     } catch (err) {
-      console.error("Critical Commit Error:", err);
       setCloudStatus('offline');
       isSyncingRef.current = false;
       return false;
@@ -130,11 +125,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (isInitialMount.current) {
-      const bootstrap = async () => {
-        await fetchGlobalRegistry(true);
-        setIsLoading(false);
-      };
-      bootstrap();
+      fetchGlobalRegistry(true).then(() => setIsLoading(false));
       isInitialMount.current = false;
     }
 
@@ -142,7 +133,7 @@ const App: React.FC = () => {
       if (document.visibilityState === 'visible' && !isSyncingRef.current) {
         fetchGlobalRegistry();
       }
-    }, 45000);
+    }, 60000);
 
     return () => clearInterval(heartbeat);
   }, [fetchGlobalRegistry]);
@@ -181,22 +172,15 @@ const App: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center">
-        <div className="w-12 h-12 border-2 border-slate-100 border-t-sky-600 rounded-sm animate-spin mb-6" />
-        <div className="text-center space-y-2">
-          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-900 animate-pulse">Establishing Registry Link</p>
-          <p className="text-[8px] font-black uppercase tracking-widest text-slate-400">Biological Hub Master Node v2.0</p>
-        </div>
+        <div className="w-12 h-12 border-2 border-slate-100 border-t-cyan-500 rounded-sm animate-spin mb-6" />
+        <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-900 animate-pulse">Initializing Master Registry</p>
       </div>
     );
   }
 
   return (
     <HashRouter>
-      <Layout 
-        cartCount={cart.reduce((acc, i) => acc + i.quantity, 0)} 
-        cloudStatus={cloudStatus}
-        lastSync={lastSyncTime}
-      >
+      <Layout cartCount={cart.reduce((acc, i) => acc + i.quantity, 0)} cloudStatus={cloudStatus} lastSync={lastSyncTime}>
         <Routes>
           <Route path="/" element={<Home products={products} />} />
           <Route path="/shop" element={<Shop products={products} addToCart={addToCart} cloudStatus={cloudStatus} lastSync={lastSyncTime} onRefresh={() => fetchGlobalRegistry()} />} />
