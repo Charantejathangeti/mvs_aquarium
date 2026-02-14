@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate, Link, Navigate } from 'react-router-dom';
-import { ShieldCheck, Loader2, MessageCircle, Lock, Truck, ChevronLeft } from 'lucide-react';
+import { ShieldCheck, Loader2, MessageCircle, Lock, Truck, ChevronLeft, CreditCard } from 'lucide-react';
 import { CartItem, Order } from '../types';
 import { WHATSAPP_NUMBER, SHIPPING_RATE_PER_KG } from '../constants';
 
@@ -79,7 +79,7 @@ Subtotal: ₹${subtotal}
 Shipping: ₹${shippingCharge}
 *Grand Total: ₹${total}*
 
-_Payment is PREPAID ONLY via GPay/PhonePe. Please send screenshot after payment for dispatch next Monday._`;
+_Payment is PREPAID ONLY via GPay/PhonePe. Please send screenshot after payment for order processing._`;
       
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
       
@@ -92,128 +92,133 @@ _Payment is PREPAID ONLY via GPay/PhonePe. Please send screenshot after payment 
   if (cart.length === 0) return <Navigate to="/shop" />;
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-16 lg:py-28">
-        <form onSubmit={handlePlaceOrder} className="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24 items-start">
+    <div className="bg-white min-h-screen border-t border-slate-100">
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <form onSubmit={handlePlaceOrder} className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
           {/* Left: Billing Details */}
-          <div className="bg-white p-12 lg:p-16 rounded-[4rem] shadow-2xl shadow-slate-200/50 space-y-16 animate-fade-in">
-            <div>
-              <Link to="/cart" className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-cyan-600 flex items-center gap-2 mb-10 group transition-all">
-                <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+          <div className="lg:col-span-7 space-y-10 animate-fade-in">
+            <div className="pb-6 border-b border-slate-100">
+              <Link to="/cart" className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-black flex items-center gap-2 mb-6 transition-all">
+                <ChevronLeft size={14} />
                 Return to Basket
               </Link>
-              <h2 className="text-5xl font-black text-slate-900 tracking-tighter leading-none">Checkout <br/><span className="text-cyan-600">Protocol.</span></h2>
-              <p className="text-slate-400 text-base font-medium mt-4">Provide authenticated delivery details.</p>
+              <h2 className="text-3xl font-black text-black tracking-tighter leading-none uppercase">Checkout Protocol</h2>
+              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-2">Logistics & Biological Fulfillment Data</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              <div className="space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">First Identity *</label>
-                <input required placeholder="First Name" className="w-full px-8 py-6 bg-slate-50 border border-slate-200 rounded-3xl outline-none focus:border-cyan-500 font-bold transition-all shadow-sm focus:ring-8 focus:ring-cyan-500/5 text-lg" value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">First Name *</label>
+                <input required className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-sm outline-none focus:border-black font-bold transition-all text-xs" value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} />
               </div>
-              <div className="space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Last Identity *</label>
-                <input required placeholder="Last Name" className="w-full px-8 py-6 bg-slate-50 border border-slate-200 rounded-3xl outline-none focus:border-cyan-500 font-bold transition-all shadow-sm focus:ring-8 focus:ring-cyan-500/5 text-lg" value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} />
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Physical Delivery Point *</label>
-              <textarea required rows={3} className="w-full px-8 py-6 bg-slate-50 border border-slate-200 rounded-3xl outline-none focus:border-cyan-500 font-bold transition-all shadow-sm focus:ring-8 focus:ring-cyan-500/5 resize-none placeholder:text-slate-300 text-lg" placeholder="Street Address, Landmark..." value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              <div className="space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Town / City *</label>
-                <input required placeholder="City Name" className="w-full px-8 py-6 bg-slate-50 border border-slate-200 rounded-3xl outline-none focus:border-cyan-500 font-bold transition-all shadow-sm focus:ring-8 focus:ring-cyan-500/5 text-lg" value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} />
-              </div>
-              <div className="space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Logistics ZIP/PIN *</label>
-                <input required placeholder="6-Digit Code" className="w-full px-8 py-6 bg-slate-50 border border-slate-200 rounded-3xl outline-none focus:border-cyan-500 font-bold transition-all shadow-sm focus:ring-8 focus:ring-cyan-500/5 text-lg" value={formData.pinCode} onChange={e => setFormData({...formData, pinCode: e.target.value})} />
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">Last Name *</label>
+                <input required className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-sm outline-none focus:border-black font-bold transition-all text-xs" value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              <div className="space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Primary Telecom *</label>
-                <input required type="tel" placeholder="+91..." className="w-full px-8 py-6 bg-slate-50 border border-slate-200 rounded-3xl outline-none focus:border-cyan-500 font-bold transition-all shadow-sm focus:ring-8 focus:ring-cyan-500/5 text-lg" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+            <div className="space-y-1.5">
+              <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">Delivery Address *</label>
+              <textarea required rows={3} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-sm outline-none focus:border-black font-bold transition-all resize-none text-xs" placeholder="Full street details..." value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">City *</label>
+                <input required className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-sm outline-none focus:border-black font-bold transition-all text-xs" value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} />
               </div>
-              <div className="space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-1">Digital Mail *</label>
-                <input required type="email" placeholder="email@address.com" className="w-full px-8 py-6 bg-slate-50 border border-slate-200 rounded-3xl outline-none focus:border-cyan-500 font-bold transition-all shadow-sm focus:ring-8 focus:ring-cyan-500/5 text-lg" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">State *</label>
+                <input required className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-sm outline-none focus:border-black font-bold transition-all text-xs" value={formData.state} onChange={e => setFormData({...formData, state: e.target.value})} />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">PIN Code *</label>
+                <input required className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-sm outline-none focus:border-black font-bold transition-all text-xs" value={formData.pinCode} onChange={e => setFormData({...formData, pinCode: e.target.value})} />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">WhatsApp Phone *</label>
+                <input required type="tel" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-sm outline-none focus:border-black font-bold transition-all text-xs" placeholder="+91..." value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">Email Address *</label>
+                <input required type="email" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-sm outline-none focus:border-black font-bold transition-all text-xs" placeholder="name@domain.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
               </div>
             </div>
           </div>
 
-          {/* Right: Order Summary Sticky Card */}
-          <div className="lg:sticky lg:top-28">
-            <div className="bg-slate-900 border border-slate-800 rounded-[4rem] p-14 text-white shadow-3xl shadow-slate-900/40 animate-fade-in" style={{ animationDelay: '0.1s' }}>
-              <h3 className="text-3xl font-black mb-12 tracking-tighter uppercase">Order Summary</h3>
+          {/* Right: Order Summary - Sharp Black Box */}
+          <div className="lg:col-span-5 lg:sticky lg:top-20">
+            <div className="bg-black text-white rounded-sm p-8 shadow-2xl animate-fade-in">
+              <h3 className="text-xs font-black mb-8 tracking-[0.2em] uppercase border-b border-white/10 pb-4">Consignment Summary</h3>
               
-              <div className="divide-y divide-slate-800">
-                <div className="pb-10 space-y-8">
+              <div className="space-y-6">
+                <div className="max-h-48 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
                   {cart.map(item => (
-                    <div key={item.id} className="flex justify-between items-start group">
+                    <div key={item.id} className="flex justify-between items-start">
                       <div className="flex flex-col">
-                        <span className="text-slate-200 font-black text-base leading-tight group-hover:text-cyan-400 transition-colors">{item.name}</span>
-                        <span className="text-[10px] font-black uppercase text-slate-500 mt-2 tracking-[0.2em]">Quantity: {item.quantity}</span>
+                        <span className="text-white font-bold text-[11px] leading-tight uppercase">{item.name}</span>
+                        <span className="text-[8px] font-black uppercase text-slate-500 mt-1 tracking-widest">Qty: {item.quantity}</span>
                       </div>
-                      <span className="text-cyan-500 font-black text-lg">₹{(item.price * item.quantity).toLocaleString()}</span>
+                      <span className="text-sky-400 font-black text-xs">₹{(item.price * item.quantity).toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
 
-                <div className="py-8 flex justify-between text-[11px] font-black uppercase tracking-[0.3em] text-slate-500">
-                  <span>Species Subtotal</span>
-                  <span className="text-slate-200">₹{subtotal.toLocaleString()}</span>
-                </div>
-
-                <div className="py-8 flex justify-between items-start">
-                  <div className="flex flex-col">
-                    <span className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-500">Logistics Rate</span>
-                    <span className="text-[10px] text-cyan-400 font-black uppercase mt-2 tracking-widest">Verified Weight: {totalWeight.toFixed(2)} KG</span>
+                <div className="pt-6 border-t border-white/10 space-y-3">
+                  <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-slate-500">
+                    <span>Species Total</span>
+                    <span className="text-white">₹{subtotal.toLocaleString()}</span>
                   </div>
-                  <span className="text-slate-200 font-black text-lg">₹{shippingCharge}</span>
+                  <div className="flex justify-between items-center">
+                    <div className="flex flex-col">
+                      <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">Logistics Fee</span>
+                      <span className="text-[7px] text-sky-500 font-black uppercase tracking-widest">{totalWeight.toFixed(2)} KG Consignment</span>
+                    </div>
+                    <span className="text-white font-black text-xs">₹{shippingCharge}</span>
+                  </div>
                 </div>
 
-                <div className="py-12 flex justify-between items-baseline">
-                  <span className="text-xs font-black text-slate-400 uppercase tracking-[0.4em]">Grand Total</span>
-                  <span className="text-6xl font-black text-cyan-400 tracking-tighter">₹{total.toLocaleString()}</span>
+                <div className="pt-8 border-t border-white/10 flex justify-between items-baseline">
+                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Total Payable</span>
+                  <span className="text-4xl font-black text-sky-400 tracking-tighter">₹{total.toLocaleString()}</span>
                 </div>
               </div>
 
-              <div className="mt-6 p-10 bg-slate-950 rounded-[3rem] border border-slate-800/50">
-                 <p className="text-[11px] text-slate-500 font-black leading-loose uppercase tracking-widest flex items-start gap-4">
-                   <Lock className="text-cyan-500 shrink-0 mt-1" size={20} />
-                   <span>SECURE PREPAID FULFILLMENT. AFTER CONFIRMATION, YOU WILL BE REDIRECTED TO WHATSAPP TO FINALIZE PAYMENT VIA GPAY/PHONEPE.</span>
+              <div className="mt-8 p-4 bg-white/5 border border-white/5 rounded-sm">
+                 <p className="text-[8px] text-slate-400 font-bold leading-relaxed uppercase tracking-widest flex items-start gap-3">
+                   <Lock className="text-sky-500 shrink-0" size={12} />
+                   <span>Prepaid Orders only. Redirection to WhatsApp for GPay/PhonePe fulfillment after confirmation.</span>
                  </p>
               </div>
 
               <button
                 type="submit"
                 disabled={isProcessing}
-                className="w-full mt-12 py-8 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black rounded-[2.5rem] transition-all flex items-center justify-center space-x-5 shadow-2xl shadow-cyan-500/20 active:scale-[0.98] disabled:opacity-50 text-base"
+                className="w-full mt-8 py-4 bg-sky-500 hover:bg-sky-400 text-black font-black rounded-sm transition-all flex items-center justify-center space-x-3 active:scale-[0.98] disabled:opacity-50"
               >
                 {isProcessing ? (
-                  <Loader2 className="animate-spin" size={28} />
+                  <Loader2 className="animate-spin" size={20} />
                 ) : (
                   <>
-                    <MessageCircle size={26} />
-                    <span className="text-xs uppercase tracking-[0.3em]">Order via WhatsApp</span>
+                    <MessageCircle size={18} />
+                    <span className="text-[10px] uppercase tracking-[0.2em]">Confirm & Order</span>
                   </>
                 )}
               </button>
               
-              <div className="mt-10 flex items-center justify-center gap-6 text-slate-600">
-                 <div className="flex items-center gap-2">
-                    <ShieldCheck size={16} />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Verified Order</span>
+              <div className="mt-8 flex items-center justify-center gap-6 text-slate-600">
+                 <div className="flex items-center gap-1.5">
+                    <ShieldCheck size={12} />
+                    <span className="text-[7px] font-black uppercase tracking-widest">Secure Gateway</span>
                  </div>
-                 <div className="w-1.5 h-1.5 bg-slate-800 rounded-full" />
-                 <div className="flex items-center gap-2">
-                    <Truck size={16} />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Express Logistics</span>
+                 <div className="w-1 h-1 bg-slate-800 rounded-full" />
+                 <div className="flex items-center gap-1.5">
+                    <Truck size={12} />
+                    <span className="text-[7px] font-black uppercase tracking-widest">Express Transit</span>
                  </div>
               </div>
             </div>
@@ -221,6 +226,17 @@ _Payment is PREPAID ONLY via GPay/PhonePe. Please send screenshot after payment 
 
         </form>
       </div>
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #0284c7;
+        }
+      `}</style>
     </div>
   );
 };

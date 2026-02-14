@@ -63,22 +63,22 @@ const Home: React.FC = () => {
           <div className="p-8 bg-white border border-slate-200 rounded-sm flex flex-col gap-4 shadow-2xl shadow-slate-900/5">
             <div className="w-12 h-12 bg-sky-50 text-sky-600 flex items-center justify-center rounded-sm"><Zap size={24} /></div>
             <div>
-              <h3 className="text-xs font-black text-black uppercase tracking-widest mb-2">Monday Dispatch</h3>
-              <p className="text-slate-500 text-[11px] font-medium leading-relaxed">Systematic dispatch every Monday to ensure parcels don't stall in courier hubs over weekends.</p>
+              <h3 className="text-xs font-black text-black uppercase tracking-widest mb-2">Monday Order Protocol</h3>
+              <p className="text-slate-500 text-[11px] font-medium leading-relaxed uppercase tracking-tight font-bold">Orders are finalized every Monday to ensure livestock safety during regional transit.</p>
             </div>
           </div>
           <div className="p-8 bg-white border border-slate-200 rounded-sm flex flex-col gap-4 shadow-2xl shadow-slate-900/5">
             <div className="w-12 h-12 bg-emerald-50 text-emerald-600 flex items-center justify-center rounded-sm"><Shield size={24} /></div>
             <div>
               <h3 className="text-xs font-black text-black uppercase tracking-widest mb-2">DOA Protection</h3>
-              <p className="text-slate-500 text-[11px] font-medium leading-relaxed">Industry leading 45% valuation refund for verified transit casualties. We share the risk.</p>
+              <p className="text-slate-500 text-[11px] font-medium leading-relaxed uppercase tracking-tight font-bold">Industry leading 45% valuation refund for verified transit casualties. We share the risk.</p>
             </div>
           </div>
           <div className="p-8 bg-white border border-slate-200 rounded-sm flex flex-col gap-4 shadow-2xl shadow-slate-900/5">
             <div className="w-12 h-12 bg-slate-50 text-slate-900 flex items-center justify-center rounded-sm"><Droplets size={24} /></div>
             <div>
               <h3 className="text-xs font-black text-black uppercase tracking-widest mb-2">Health First</h3>
-              <p className="text-slate-500 text-[11px] font-medium leading-relaxed">All livestock undergo a minimum 14-day quarantine before listing in our catalog.</p>
+              <p className="text-slate-500 text-[11px] font-medium leading-relaxed uppercase tracking-tight font-bold">All livestock undergo a minimum 14-day quarantine before listing in our catalog.</p>
             </div>
           </div>
         </div>
@@ -112,7 +112,7 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-black text-black uppercase tracking-tighter mb-4">Latest Arrivals</h2>
-            <p className="text-sm text-slate-400 font-medium max-w-md mx-auto uppercase tracking-widest">Freshly quarantined livestock now available for dispatch.</p>
+            <p className="text-sm text-slate-400 font-medium max-w-md mx-auto uppercase tracking-widest">Freshly quarantined livestock now available for ordering.</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">

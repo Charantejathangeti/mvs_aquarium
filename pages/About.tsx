@@ -6,13 +6,12 @@ import { BUSINESS_INFO } from '../constants';
 const About: React.FC = () => {
   return (
     <div className="bg-white pb-24">
-      {/* Header Banner */}
+      {/* Header Banner - Minimalist Legacy */}
       <section className="bg-slate-900 py-24 px-4 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
            <img src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&q=80&w=1920" className="w-full h-full object-cover" alt="Banner" />
         </div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-block px-4 py-1 border border-sky-500/30 bg-sky-500/10 text-sky-400 rounded-sm mb-6 text-[10px] font-black uppercase tracking-widest">Est. 2015</div>
           <h1 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter">Aquatic Legacy.</h1>
           <p className="text-base text-slate-400 leading-relaxed font-medium max-w-2xl mx-auto uppercase tracking-wide">
             MVS Aqua is a premier biological fulfillment center based in Tirupati, 
@@ -85,7 +84,7 @@ const About: React.FC = () => {
                 <History size={24} className="text-sky-600 mb-6" />
                 <h4 className="text-xs font-black text-black uppercase tracking-widest mb-4">Precision Logistics</h4>
                 <p className="text-[11px] text-slate-500 leading-relaxed font-medium">
-                  Dispatching exclusively on Mondays allows us to avoid the "weekend lag" where parcels sit in hot courier hubs. Every minute matters in live transit.
+                  Ordering exclusively on Mondays allows us to avoid the "weekend lag" where parcels sit in hot courier hubs. Every minute matters in live transit.
                 </p>
              </div>
              <div className="bg-white p-10 border border-slate-200 rounded-sm hover:translate-y-[-4px] transition-all">

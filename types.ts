@@ -1,4 +1,9 @@
 
+export interface Variation {
+  name: string;
+  priceModifier?: number; // Optional price change (e.g., +100 for Larger size)
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -8,10 +13,12 @@ export interface Product {
   category: string;
   stock: number;
   weight: number; // in kg
+  variations?: Variation[];
 }
 
 export interface CartItem extends Product {
   quantity: number;
+  selectedVariation?: string;
 }
 
 export interface Order {

@@ -25,29 +25,39 @@ const App: React.FC = () => {
     localStorage.setItem('mvs_aqua_cart', JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (product: Product, quantity: number = 1) => {
+  const addToCart = (product: Product, quantity: number = 1, selectedVariation?: string) => {
     setCart(prev => {
-      const existing = prev.find(item => item.id === product.id);
+      // Find item with same ID AND same variation
+      const existing = prev.find(item => 
+        item.id === product.id && item.selectedVariation === selectedVariation
+      );
+      
       if (existing) {
         return prev.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+          (item.id === product.id && item.selectedVariation === selectedVariation)
+            ? { ...item, quantity: item.quantity + quantity } 
+            : item
         );
       }
-      return [...prev, { ...product, quantity }];
+      return [...prev, { ...product, quantity, selectedVariation }];
     });
   };
 
-  const removeFromCart = (productId: string) => {
-    setCart(prev => prev.filter(item => item.id !== productId));
+  const removeFromCart = (productId: string, variation?: string) => {
+    setCart(prev => prev.filter(item => 
+      !(item.id === productId && item.selectedVariation === variation)
+    ));
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (productId: string, quantity: number, variation?: string) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      removeFromCart(productId, variation);
       return;
     }
     setCart(prev => prev.map(item =>
-      item.id === productId ? { ...item, quantity } : item
+      (item.id === productId && item.selectedVariation === variation) 
+        ? { ...item, quantity } 
+        : item
     ));
   };
 

@@ -124,13 +124,13 @@ const Layout: React.FC<LayoutProps> = ({ children, cartCount }) => {
               <h3 className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">Social</h3>
               <div className="flex flex-col space-y-2">
                 <a href={BUSINESS_INFO.socials.instagram} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 group">
-                  <div className="p-1.5 bg-pink-50 border border-pink-100 text-[#E4405F] rounded-sm group-hover:bg-[#E4405F] group-hover:text-white transition-all">
+                  <div className="p-2 bg-pink-50 border border-pink-100 text-[#E4405F] group-hover:bg-[#E4405F] group-hover:text-white transition-all rounded-sm">
                     <Instagram size={12} />
                   </div>
                   <span className="text-[10px] font-black text-slate-700 group-hover:text-black transition-colors uppercase tracking-widest">mvs_aqua</span>
                 </a>
-                <a href={BUSINESS_INFO.socials.youtube} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 group">
-                  <div className="p-1.5 bg-red-50 border border-red-100 text-[#FF0000] rounded-sm group-hover:bg-[#FF0000] group-hover:text-white transition-all">
+                <a href={BUSINESS_INFO.socials.youtube} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 group">
+                  <div className="p-2 bg-red-50 border border-red-100 text-[#FF0000] group-hover:bg-[#FF0000] group-hover:text-white transition-all rounded-sm">
                     <Youtube size={12} />
                   </div>
                   <span className="text-[10px] font-black text-slate-700 group-hover:text-black transition-colors uppercase tracking-widest">MVS Aqua</span>
@@ -141,7 +141,7 @@ const Layout: React.FC<LayoutProps> = ({ children, cartCount }) => {
 
           <div className="mt-6 pt-4 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-2">
             <div className="flex items-center gap-3 text-[8px] font-bold text-slate-400 uppercase tracking-widest">
-              <span>MONDAY DISPATCH</span>
+              <span>MONDAY ORDER</span>
               <span className="h-0.5 w-0.5 bg-slate-300 rounded-full" />
               <span>DOA: 45% REFUND</span>
               <span className="h-0.5 w-0.5 bg-slate-300 rounded-full" />

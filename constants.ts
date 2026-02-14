@@ -25,7 +25,7 @@ export const SHIPPING_RATE_PER_KG = 80;
 
 export const CATEGORIES = [
   'Bettas', 'Tetras', 'Goldfish', 'Plants', 'Shrimps', 
-  'Discus', 'Livebearers', 'Cichlids', 'Tools', 'Food', 'Accessories'
+  'Discus', 'Livebearers', 'Cichlids', 'Tools', 'Food', 'Accessories', 'Other'
 ];
 
 export const BUSINESS_INFO = {
@@ -49,7 +49,12 @@ export const MOCK_PRODUCTS: Product[] = [
     image: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&q=80&w=1200',
     category: 'Bettas',
     stock: 12,
-    weight: 0.5 
+    weight: 0.5,
+    variations: [
+      { name: 'Royal Blue' },
+      { name: 'Red Dragon', priceModifier: 50 },
+      { name: 'Mustard Gas', priceModifier: 100 }
+    ]
   },
   {
     id: '2',
@@ -69,7 +74,11 @@ export const MOCK_PRODUCTS: Product[] = [
     image: 'https://images.unsplash.com/photo-1524704659690-3f7a3000bb24?auto=format&fit=crop&q=80&w=1200',
     category: 'Goldfish',
     stock: 8,
-    weight: 1.2
+    weight: 1.2,
+    variations: [
+      { name: 'Medium (3-4 inch)' },
+      { name: 'Large (5-6 inch)', priceModifier: 600 }
+    ]
   },
   {
     id: '4',
@@ -79,7 +88,11 @@ export const MOCK_PRODUCTS: Product[] = [
     image: 'https://images.unsplash.com/photo-1546024073-922623a8a84b?auto=format&fit=crop&q=80&w=1200',
     category: 'Plants',
     stock: 25,
-    weight: 0.8
+    weight: 0.8,
+    variations: [
+      { name: 'Standard' },
+      { name: 'XL Specimen', priceModifier: 200 }
+    ]
   },
   {
     id: '5',
@@ -100,45 +113,5 @@ export const MOCK_PRODUCTS: Product[] = [
     category: 'Discus',
     stock: 6,
     weight: 1.5
-  },
-  {
-    id: '7',
-    name: 'Dumbo Ear Guppy Pair',
-    description: 'A breeding pair of Dumbo Ear Guppies featuring oversized pectoral fins and high-contrast color patterns.',
-    price: 350,
-    image: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&q=80&w=1200',
-    category: 'Livebearers',
-    stock: 20,
-    weight: 0.1
-  },
-  {
-    id: '8',
-    name: 'Electric Blue Ram (Pair)',
-    description: 'Peaceful dwarf cichlids with striking iridescent blue coloration. Ideal for established community aquariums.',
-    price: 850,
-    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=1200',
-    category: 'Cichlids',
-    stock: 10,
-    weight: 0.4
-  },
-  {
-    id: '9',
-    name: 'Aquascaping Tool Kit (5-in-1)',
-    description: 'Professional grade stainless steel tools including scissors, tweezers, and substrate leveler in a carry case.',
-    price: 1450,
-    image: 'https://images.unsplash.com/photo-1546024073-922623a8a84b?auto=format&fit=crop&q=80&w=1200',
-    category: 'Tools',
-    stock: 30,
-    weight: 1.0
-  },
-  {
-    id: '10',
-    name: 'MVS Premium Spirulina Pellets',
-    description: 'Balanced nutrition for all tropical fish. Rich in natural carotenoids to enhance livestock coloration.',
-    price: 250,
-    image: 'https://images.unsplash.com/photo-1524704659690-3f7a3000bb24?auto=format&fit=crop&q=80&w=1200',
-    category: 'Food',
-    stock: 100,
-    weight: 0.2
   }
 ];
