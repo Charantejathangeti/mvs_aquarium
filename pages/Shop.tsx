@@ -1,18 +1,19 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router';
-import { ShoppingCart, Search, Plus, Minus, Layers, Filter, Grid3X3, Globe } from 'lucide-react';
+import { ShoppingCart, Search, Plus, Minus, Layers, Filter, Grid3X3, Globe, RefreshCw } from 'lucide-react';
 import { CATEGORIES } from '../constants';
 import { Product } from '../types';
 
 interface ShopProps {
   products: Product[];
   addToCart: (product: Product, quantity: number) => void;
-  cloudStatus?: string;
+  cloudStatus?: 'online' | 'offline' | 'syncing';
   lastSync?: string;
+  onRefresh?: () => void;
 }
 
-const Shop: React.FC<ShopProps> = ({ products, addToCart, cloudStatus, lastSync }) => {
+const Shop: React.FC<ShopProps> = ({ products, addToCart, cloudStatus, lastSync, onRefresh }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState('');
@@ -45,15 +46,31 @@ const Shop: React.FC<ShopProps> = ({ products, addToCart, cloudStatus, lastSync 
       {/* Header - Compact */}
       <div className="bg-slate-50 border-b border-slate-200 py-3 px-4">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
              <div className="flex items-center gap-2">
                 <Grid3X3 size={14} className="text-black" />
                 <h1 className="text-[12px] font-black text-black uppercase tracking-widest">Registry Stocklist</h1>
              </div>
              <div className="h-4 w-px bg-slate-200 hidden md:block" />
-             <div className="flex items-center gap-2">
-                <Globe size={10} className={cloudStatus === 'syncing' ? 'text-sky-500 animate-spin' : 'text-emerald-500'} />
-                <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">Live Sync: {lastSync || 'Establishing...'}</span>
+             <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Globe size={10} className={
+                    cloudStatus === 'syncing' ? 'text-sky-500 animate-spin' : 
+                    cloudStatus === 'online' ? 'text-emerald-500' : 'text-red-500'
+                  } />
+                  <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">
+                    {cloudStatus === 'offline' ? 'CONNECTION LOST' : `Live Sync: ${lastSync || 'Establishing...'}`}
+                  </span>
+                </div>
+                {onRefresh && (
+                  <button 
+                    onClick={onRefresh}
+                    className="p-1 hover:bg-slate-200 rounded-sm text-slate-400 hover:text-black transition-colors"
+                    title="Refresh Global Stock"
+                  >
+                    <RefreshCw size={10} className={cloudStatus === 'syncing' ? 'animate-spin' : ''} />
+                  </button>
+                )}
              </div>
           </div>
           <div className="relative w-full max-w-xs">

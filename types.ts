@@ -17,6 +17,11 @@ export interface Product {
   weight: number; 
   variations?: Variation[];
   updatedAt?: string;
+  // Professional biological metadata
+  tempRange?: string;
+  phRange?: string;
+  diet?: string;
+  origin?: string;
 }
 
 export interface CartItem extends Product {

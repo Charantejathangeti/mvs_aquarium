@@ -4,13 +4,14 @@ import { AdminConfig, Product } from './types';
 export const COLORS = {
   bg: '#ffffff',
   card: '#ffffff',
-  primary: '#0891b2', // Tactical Aqua
-  primaryHover: '#0e7490',
-  secondary: '#be185d', 
-  accent: '#b45309',    
-  success: '#059669',
-  warning: '#d97706',
-  danger: '#dc2626',
+  primary: '#00d2ff', // Electric Teal
+  primaryDark: '#008ba8',
+  secondary: '#d4af37', // Champagne Gold
+  accent: '#10b981',    
+  success: '#10b981',
+  warning: '#f59e0b',
+  danger: '#ef4444',
+  surface: '#0a0f14', // Deep Sea Charcoal
   textMain: '#0f172a', 
   textMuted: '#64748b', 
 };
@@ -42,7 +43,7 @@ export const BUSINESS_INFO = {
 
 export const MOCK_PRODUCTS: Product[] = [
   {
-    id: '1',
+    id: 'MVS-1001',
     name: 'Premium Halfmoon Betta - Royal Blue',
     scientificName: 'Betta splendens',
     careLevel: 'Easy',
@@ -52,10 +53,9 @@ export const MOCK_PRODUCTS: Product[] = [
     category: 'Bettas',
     stock: 12,
     weight: 0.5,
-    variations: [
-      { name: 'Royal Blue' },
-      { name: 'Red Dragon', priceModifier: 50 },
-      { name: 'Mustard Gas', priceModifier: 100 }
-    ]
+    tempRange: '24-28°C',
+    phRange: '6.5-7.5',
+    diet: 'Carnivore',
+    origin: 'Southeast Asia'
   }
 ];
