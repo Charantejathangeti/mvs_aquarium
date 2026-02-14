@@ -6,8 +6,14 @@ import {
   Clock, Circle, HelpCircle
 } from 'lucide-react';
 import { WHATSAPP_NUMBER } from '../constants';
+import { Order } from '../types';
 
-const Tracking: React.FC = () => {
+interface TrackingProps {
+  // Added orders prop to resolve type error in App.tsx
+  orders: Order[];
+}
+
+const Tracking: React.FC<TrackingProps> = ({ orders }) => {
   const [orderId, setOrderId] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -15,24 +21,32 @@ const Tracking: React.FC = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSearching(true);
-    // Simulating a registry lookup
+    
+    // Perform lookup against the provided orders registry
     setTimeout(() => {
-      setResult({
-        id: orderId.toUpperCase(),
-        status: 'SHIPPED',
-        carrier: 'Professional Courier',
-        trackingUrl: 'https://www.tpcindia.com/',
-        orderDate: 'March 11, 2024',
-        estimatedArrival: 'March 14, 2024',
-        location: 'Hub Transit - Nellore',
-        history: [
-          { event: 'Order Received', desc: 'Order logged and confirmed', date: 'Mar 11, 09:24 AM', status: 'completed' },
-          { event: 'Processing', desc: 'Product health check & packaging', date: 'Mar 11, 02:15 PM', status: 'completed' },
-          { event: 'Shipped', desc: 'Handed over to delivery partner', date: 'Mar 12, 10:30 AM', status: 'completed' },
-          { event: 'In Transit', desc: 'Arrived at regional sorting center', date: 'Mar 13, 04:45 AM', status: 'active' },
-          { event: 'Delivered', desc: 'Finalized arrival at destination', date: 'Pending', status: 'pending' },
-        ]
-      });
+      const normalizedSearchId = orderId.trim().toUpperCase().replace('#', '');
+      const foundOrder = orders.find(o => o.id.toUpperCase() === normalizedSearchId);
+
+      if (foundOrder) {
+        setResult({
+          id: foundOrder.id,
+          status: foundOrder.status.toUpperCase(),
+          carrier: 'Professional Courier',
+          trackingUrl: 'https://www.tpcindia.com/',
+          orderDate: new Date(foundOrder.date).toLocaleDateString(),
+          estimatedArrival: foundOrder.status === 'delivered' ? 'Arrived' : 'In Transit',
+          location: foundOrder.status === 'pending' ? 'Tirupati Hub' : (foundOrder.status === 'delivered' ? 'Destination' : 'Regional Transit'),
+          history: [
+            { event: 'Order Received', desc: 'Order logged and confirmed', date: new Date(foundOrder.date).toLocaleString(), status: 'completed' },
+            { event: 'Processing', desc: 'Product health check & packaging', date: foundOrder.status !== 'pending' ? 'Completed' : 'Pending', status: foundOrder.status !== 'pending' ? 'completed' : 'pending' },
+            { event: 'Shipped', desc: 'Handed over to delivery partner', date: ['shipped', 'delivered'].includes(foundOrder.status) ? 'Completed' : 'Pending', status: ['shipped', 'delivered'].includes(foundOrder.status) ? 'completed' : (foundOrder.status === 'packed' ? 'active' : 'pending') },
+            { event: 'In Transit', desc: 'Arrived at regional sorting center', date: foundOrder.status === 'shipped' ? 'Active' : (foundOrder.status === 'delivered' ? 'Completed' : 'Pending'), status: foundOrder.status === 'shipped' ? 'active' : (foundOrder.status === 'delivered' ? 'completed' : 'pending') },
+            { event: 'Delivered', desc: 'Finalized arrival at destination', date: foundOrder.status === 'delivered' ? 'Completed' : 'Pending', status: foundOrder.status === 'delivered' ? 'completed' : 'pending' },
+          ]
+        });
+      } else {
+        setResult(null);
+      }
       setIsSearching(false);
     }, 800);
   };

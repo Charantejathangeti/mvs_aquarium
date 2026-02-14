@@ -8,9 +8,12 @@ import { WHATSAPP_NUMBER, SHIPPING_RATE_PER_KG } from '../constants';
 interface CheckoutProps {
   cart: CartItem[];
   clearCart: () => void;
+  // Added onOrderComplete and orders props to resolve type errors in App.tsx
+  onOrderComplete: (orders: Order[]) => Promise<boolean>;
+  orders: Order[];
 }
 
-const Checkout: React.FC<CheckoutProps> = ({ cart, clearCart }) => {
+const Checkout: React.FC<CheckoutProps> = ({ cart, clearCart, onOrderComplete, orders }) => {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
@@ -33,7 +36,8 @@ const Checkout: React.FC<CheckoutProps> = ({ cart, clearCart }) => {
     e.preventDefault();
     setIsProcessing(true);
     
-    setTimeout(() => {
+    // Artificial delay to mimic secure processing
+    setTimeout(async () => {
       const orderId = 'MVS' + Math.floor(100000 + Math.random() * 900000);
       
       const newOrder: Order = {
@@ -57,12 +61,10 @@ const Checkout: React.FC<CheckoutProps> = ({ cart, clearCart }) => {
         status: 'pending'
       };
 
-      // Save record
-      const existingOrders = JSON.parse(localStorage.getItem('mvs_aqua_orders') || '[]');
-      existingOrders.push(newOrder);
-      localStorage.setItem('mvs_aqua_orders', JSON.stringify(existingOrders));
+      // Push to Global Registry instead of direct localStorage manipulation
+      await onOrderComplete([...orders, newOrder]);
 
-      // WhatsApp Message
+      // WhatsApp Message Generation
       const productList = cart.map(i => `• ${i.name} x ${i.quantity} (₹${i.price})`).join('\n');
       const message = `*NEW ORDER: #${orderId}*
 

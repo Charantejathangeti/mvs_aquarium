@@ -1,16 +1,17 @@
 
 import React from 'react';
-/* Import from react-router instead of react-router-dom to fix missing export errors in v7 environments */
 import { Link, useNavigate, useLocation } from 'react-router';
-import { ShoppingCart, User, LogOut, Menu, X, MessageCircle, Mail, Instagram, Youtube, Phone } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Menu, X, MessageCircle, Mail, Instagram, Youtube, Globe } from 'lucide-react';
 import { BUSINESS_INFO, WHATSAPP_NUMBER } from '../constants';
 
 interface LayoutProps {
   children: React.ReactNode;
   cartCount: number;
+  cloudStatus?: 'online' | 'offline' | 'syncing';
+  lastSync?: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, cartCount }) => {
+const Layout: React.FC<LayoutProps> = ({ children, cartCount, cloudStatus = 'offline', lastSync }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const location = useLocation();
   const isAdmin = sessionStorage.getItem('mvs_aqua_admin') === '1';
@@ -63,9 +64,9 @@ const Layout: React.FC<LayoutProps> = ({ children, cartCount }) => {
               </Link>
 
               {isAdmin ? (
-                <button onClick={handleLogout} className="p-1.5 text-slate-500 hover:text-red-600">
-                  <LogOut size={18} />
-                </button>
+                <Link to="/admin" className="p-1.5 text-sky-600 hover:text-sky-700">
+                  <User size={18} />
+                </Link>
               ) : (
                 <Link to="/admin-login" className="p-1.5 text-slate-500 hover:text-black">
                   <User size={18} />
@@ -86,49 +87,47 @@ const Layout: React.FC<LayoutProps> = ({ children, cartCount }) => {
         {children}
       </main>
 
-      {/* Reduced & Compact Footer */}
       <footer className="bg-white border-t border-slate-100 py-4 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             
-            {/* Minimal Branding */}
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 bg-black flex items-center justify-center text-white font-black rounded-sm text-[10px]">M</div>
+            <div className="flex items-center gap-4">
+              <div className="w-8 h-8 bg-black flex items-center justify-center text-white font-black rounded-sm text-[11px]">M</div>
               <div className="flex flex-col">
-                <span className="text-[10px] font-black text-black uppercase tracking-tighter">MVS AQUA</span>
-                <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest">Tirupati Registry</span>
+                <span className="text-xs font-black text-black uppercase tracking-tighter leading-none">MVS AQUA HUB</span>
+                <div className="flex items-center gap-2 mt-1.5">
+                   <Globe 
+                    size={10} 
+                    className={`${
+                      cloudStatus === 'online' ? 'text-emerald-500' : 
+                      cloudStatus === 'syncing' ? 'text-sky-500 animate-spin' : 
+                      'text-red-500'
+                    }`} 
+                   />
+                   <span className="text-[7.5px] font-black text-slate-400 uppercase tracking-widest leading-none">
+                     {cloudStatus === 'online' ? `GLOBAL SYNC: ${lastSync}` : cloudStatus === 'syncing' ? 'REFRESHING MASTER STOCK...' : 'REGISTRY DISCONNECTED'}
+                   </span>
+                </div>
               </div>
             </div>
 
-            {/* Combined compact links */}
-            <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8">
-              <div className="flex items-center gap-3">
-                <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:text-emerald-700 transition-colors">
-                  <MessageCircle size={14} />
-                </a>
-                <a href={`mailto:${BUSINESS_INFO.email}`} className="text-sky-600 hover:text-sky-700 transition-colors">
-                  <Mail size={14} />
-                </a>
-                <a href={BUSINESS_INFO.socials.instagram} target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:text-pink-700 transition-colors">
-                  <Instagram size={14} />
-                </a>
-                <a href={BUSINESS_INFO.socials.youtube} target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-700 transition-colors">
-                  <Youtube size={14} />
-                </a>
+            <div className="flex items-center gap-8">
+              <div className="flex items-center gap-4">
+                <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:scale-110 transition-transform"><MessageCircle size={16} /></a>
+                <a href={`mailto:${BUSINESS_INFO.email}`} className="text-sky-600 hover:scale-110 transition-transform"><Mail size={16} /></a>
+                <a href={BUSINESS_INFO.socials.instagram} target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:scale-110 transition-transform"><Instagram size={16} /></a>
+                <a href={BUSINESS_INFO.socials.youtube} target="_blank" rel="noopener noreferrer" className="text-red-600 hover:scale-110 transition-transform"><Youtube size={16} /></a>
               </div>
-              <div className="h-3 w-px bg-slate-200 hidden sm:block" />
-              <div className="flex items-center gap-4 text-[8px] font-black text-slate-400 uppercase tracking-[0.15em]">
-                <span className="hidden sm:inline">Prepaid Only</span>
-                <span className="hidden sm:inline">•</span>
-                <span>Monday Dispatch Protocol</span>
-                <span className="hidden sm:inline">•</span>
-                <span className="hidden sm:inline">DOA Coverage</span>
+              <div className="h-4 w-px bg-slate-100 hidden sm:block" />
+              <div className="hidden sm:flex items-center gap-4 text-[8px] font-black text-slate-400 uppercase tracking-widest">
+                <span className="bg-slate-50 px-2 py-0.5 border border-slate-100">PREPAID ONLY</span>
+                <span>•</span>
+                <span className="bg-slate-50 px-2 py-0.5 border border-slate-100">DOA COVERAGE</span>
               </div>
             </div>
 
-            {/* Copyright */}
-            <div className="text-[8px] font-black text-slate-300 uppercase tracking-widest">
-              &copy; {new Date().getFullYear()} MVS AQUA
+            <div className="text-[9px] font-black text-slate-300 uppercase tracking-widest">
+              &copy; {new Date().getFullYear()} MVS GLOBAL REGISTRY NODE
             </div>
 
           </div>

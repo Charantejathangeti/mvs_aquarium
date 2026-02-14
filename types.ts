@@ -5,17 +5,18 @@ export interface Variation {
 }
 
 export interface Product {
-  id: string;
+  id: string; // Acts as _id in MongoDB
   name: string;
-  scientificName?: string; // New: Biological nomenclature
-  careLevel?: 'Easy' | 'Moderate' | 'Advanced'; // New: Difficulty rating
+  scientificName?: string;
+  careLevel?: 'Easy' | 'Moderate' | 'Advanced';
   description: string;
   price: number;
   image: string;
   category: string;
   stock: number;
-  weight: number; // in kg
+  weight: number; 
   variations?: Variation[];
+  updatedAt?: string;
 }
 
 export interface CartItem extends Product {
@@ -24,7 +25,7 @@ export interface CartItem extends Product {
 }
 
 export interface Order {
-  id: string;
+  id: string; // Acts as _id in MongoDB
   customerName: string;
   firstName: string;
   lastName: string;
