@@ -29,16 +29,15 @@ const App: React.FC = () => {
 
   const fetchGlobalRegistry = useCallback(async () => {
     try {
-      const response = await fetch(`https://api.npoint.io/${GLOBAL_SYNC_BIN}`, { 
+      const response = await fetch(`https://api.npoint.io/${GLOBAL_SYNC_BIN}?nocache=${Date.now()}`, { 
         headers: { 
           'Accept': 'application/json',
-          'Cache-Control': 'no-cache'
+          'Cache-Control': 'no-cache, no-store, must-revalidate'
         }
       });
       
       if (response.ok) {
         const cloudData = await response.json();
-        // Even if array is empty, it's valid cloud data (admin might have deleted everything)
         if (Array.isArray(cloudData)) {
           setProducts(cloudData);
           localStorage.setItem('mvs_aqua_products', JSON.stringify(cloudData));
@@ -47,7 +46,7 @@ const App: React.FC = () => {
       }
       return false;
     } catch (err) {
-      console.error("MVS Registry Fetch Error:", err);
+      console.error("MVS Global Registry Link Failure:", err);
       return false;
     }
   }, []);
@@ -82,7 +81,7 @@ const App: React.FC = () => {
         body: JSON.stringify(newProducts)
       });
     } catch (err) {
-      console.error("Sync Failure:", err);
+      console.error("Cloud broadcast failed. Current view is local-only.", err);
     }
   };
 
@@ -126,7 +125,10 @@ const App: React.FC = () => {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center">
         <div className="w-12 h-12 border-4 border-slate-100 border-t-sky-600 rounded-full animate-spin mb-6" />
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-900">Synchronizing Inventory</p>
+        <div className="text-center">
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-900">MVS Aqua Registry</p>
+          <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-slate-400 mt-2">Connecting to Global Feed...</p>
+        </div>
       </div>
     );
   }

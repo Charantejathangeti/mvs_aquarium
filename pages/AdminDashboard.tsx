@@ -6,7 +6,8 @@ import {
   X, Image as ImageIcon, Edit2, 
   Box, Plus, FileText, RefreshCw, 
   CheckCircle, PackageCheck, Truck, ClipboardList, 
-  CreditCard, UserCheck, Printer, Phone, MapPin, Menu, Layers
+  CreditCard, UserCheck, Printer, Phone, Menu, Layers,
+  ChevronRight, Save, Globe
 } from 'lucide-react';
 import { CATEGORIES } from '../constants';
 import { Product, Order, Variation } from '../types';
@@ -85,52 +86,32 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
     setTimeout(() => setShowSuccessToast(false), 3000);
   };
 
-  const generateManualInvoice = (e: React.FormEvent) => {
-    e.preventDefault();
-    const subtotal = invoiceForm.items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    const totalWeight = invoiceForm.items.reduce((acc, item) => acc + (item.weight * item.quantity), 0);
-    const shipping = Math.max(80, Math.ceil(totalWeight) * 80);
-    const tax = (subtotal * invoiceForm.taxRate) / 100;
-    const total = subtotal + shipping + tax;
-    const orderId = 'INV-' + Math.floor(100000 + Math.random() * 900000);
-    
-    const newOrder: Order = {
-      id: orderId, firstName: invoiceForm.firstName, lastName: invoiceForm.lastName,
-      customerName: `${invoiceForm.firstName} ${invoiceForm.lastName}`, email: invoiceForm.email,
-      phone: invoiceForm.phone, address: invoiceForm.address, city: invoiceForm.city,
-      state: invoiceForm.state, pinCode: invoiceForm.pinCode, country: 'India',
-      items: invoiceForm.items.map(item => ({ ...item, category: 'Manual' } as any)),
-      subtotal, shippingCharge: shipping, total, weight: totalWeight,
-      date: new Date().toISOString(), status: 'pending'
-    };
-
-    const existing = JSON.parse(localStorage.getItem('mvs_aqua_orders') || '[]');
-    existing.push(newOrder);
-    localStorage.setItem('mvs_aqua_orders', JSON.stringify(existing));
-    setOrders(existing);
-    navigate(`/invoice/${orderId}`, { state: { orderData: newOrder } });
+  const deleteProduct = async (id: string) => {
+    if (!confirm('Remove this specimen from global registry?')) return;
+    const updated = products.filter(p => p.id !== id);
+    await setProducts(updated);
   };
 
   return (
     <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden">
       {showSuccessToast && (
-        <div className="fixed top-8 right-8 z-[100] bg-emerald-600 text-white px-6 py-4 flex items-center gap-3 rounded-md shadow-2xl animate-fade-in">
+        <div className="fixed top-8 right-8 z-[100] bg-emerald-600 text-white px-6 py-4 flex items-center gap-3 rounded-sm shadow-2xl animate-fade-in border border-white/10">
           <CheckCircle className="text-white" size={20} />
-          <span className="font-bold text-sm">Inventory Successfully Updated</span>
+          <span className="font-bold text-[10px] uppercase tracking-widest">Registry Sync Complete</span>
         </div>
       )}
 
       {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 transform transition-transform duration-300 md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="p-8 border-b border-white/10 flex items-center justify-between">
+        <div className="p-8 border-b border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-sky-600 text-white font-black flex items-center justify-center rounded-md text-base">M</div>
-            <span className="font-extrabold text-white text-lg tracking-tight">Admin Console</span>
+            <div className="w-8 h-8 bg-sky-600 text-white font-black flex items-center justify-center rounded-sm text-sm">M</div>
+            <span className="font-extrabold text-white text-base tracking-tighter uppercase">Admin Hub</span>
           </div>
-          <button onClick={() => setIsSidebarOpen(false)} className="md:hidden p-2 text-white"><X size={24}/></button>
+          <button onClick={() => setIsSidebarOpen(false)} className="md:hidden p-2 text-white/50 hover:text-white transition-colors"><X size={20}/></button>
         </div>
 
-        <nav className="p-4 space-y-2 mt-6">
+        <nav className="p-4 space-y-1.5 mt-6">
           {[
             { id: 'Dashboard', icon: LayoutDashboard },
             { id: 'Products', icon: Box },
@@ -140,32 +121,32 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
             <button
               key={tab.id}
               onClick={() => { setActiveTab(tab.id as any); setIsSidebarOpen(false); }}
-              className={`w-full flex items-center gap-4 px-5 py-4 font-bold rounded-md transition-all ${
+              className={`w-full flex items-center gap-4 px-5 py-4 font-black rounded-sm transition-all text-[9px] uppercase tracking-[0.25em] ${
                 activeTab === tab.id ? 'bg-sky-600 text-white shadow-lg' : 'hover:bg-white/5 hover:text-white'
               }`}
             >
-              <tab.icon size={20} />
-              <span className="text-sm">{tab.id}</span>
+              <tab.icon size={16} />
+              <span>{tab.id}</span>
             </button>
           ))}
         </nav>
 
-        <div className="absolute bottom-0 w-full p-4 border-t border-white/10">
-          <button onClick={handleLogout} className="w-full flex items-center gap-4 px-5 py-4 text-slate-400 hover:text-red-400 font-bold rounded-md transition-all">
-            <LogOut size={20} />
-            <span className="text-sm">Logout</span>
+        <div className="absolute bottom-0 w-full p-6 border-t border-white/5">
+          <button onClick={handleLogout} className="w-full flex items-center gap-4 px-5 py-4 text-slate-500 hover:text-red-400 font-black text-[9px] uppercase tracking-widest transition-all">
+            <LogOut size={16} />
+            <span>End Session</span>
           </button>
         </div>
       </aside>
 
       {/* Main Container */}
       <main className="flex-grow flex flex-col min-w-0 h-screen overflow-hidden">
-        <header className="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-10 shrink-0 z-10 shadow-sm">
+        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shrink-0 z-10 shadow-sm">
           <div className="flex items-center gap-4">
-            <button onClick={() => setIsSidebarOpen(true)} className="md:hidden p-2 text-slate-500"><Menu size={24}/></button>
+            <button onClick={() => setIsSidebarOpen(true)} className="md:hidden p-1.5 text-slate-500"><Menu size={20}/></button>
             <div className="flex flex-col">
-              <span className="font-extrabold text-slate-900 text-2xl leading-none">{activeTab}</span>
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Store Management</span>
+              <span className="font-black text-slate-900 text-lg uppercase tracking-tight leading-none">{activeTab}</span>
+              <span className="text-[8px] font-black text-slate-400 uppercase tracking-[0.3em] mt-1">Registry Core v2.5</span>
             </div>
           </div>
           <div className="flex items-center gap-6">
@@ -176,215 +157,158 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
                     setProductForm({name:'', scientificName: '', category:CATEGORIES[0], price:0, weight:0, image:'', description:'', stock:0, careLevel: 'Easy', variations: []}); 
                     setIsProductModalOpen(true); 
                   }} 
-                  className="px-6 py-3 bg-slate-900 text-white font-bold rounded-md flex items-center gap-2 hover:bg-sky-600 transition-all text-sm shadow-md"
+                  className="px-5 py-2.5 bg-slate-900 text-white font-black text-[9px] uppercase tracking-widest rounded-sm flex items-center gap-2 hover:bg-sky-600 transition-all shadow-md"
                 >
-                  <Plus size={18} /> Add Product
+                  <Plus size={14} /> Add Specimen
                 </button>
              )}
-             <div className="flex items-center gap-3 pl-6 border-l border-slate-200">
-               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-               <span className="text-slate-500 font-bold text-xs uppercase tracking-widest">Global Cloud Connected</span>
+             <div className="flex items-center gap-2.5 pl-6 border-l border-slate-200">
+               <Globe size={12} className="text-emerald-500 animate-pulse" />
+               <span className="text-slate-400 font-black text-[8px] uppercase tracking-[0.2em]">Connected</span>
              </div>
           </div>
         </header>
 
-        <div className="flex-grow overflow-y-auto p-8 md:p-12 bg-slate-50">
+        <div className="flex-grow overflow-y-auto p-8 bg-slate-50">
           {activeTab === 'Dashboard' && (
-            <div className="space-y-8 max-w-6xl">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div className="space-y-8 max-w-5xl mx-auto animate-fade-in">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {[
-                  { label: 'Total Stocked Species', value: products.length, icon: Box, color: 'text-slate-900' },
-                  { label: 'Active Order Flow', value: stats.activeOrders, icon: Truck, color: 'text-sky-600' },
-                  { label: 'Cumulative Revenue', value: `₹${stats.revenue.toLocaleString()}`, icon: CreditCard, color: 'text-emerald-600' }
+                  { label: 'Stock Types', value: products.length, icon: Box, color: 'text-slate-900' },
+                  { label: 'Active Shipments', value: stats.activeOrders, icon: Truck, color: 'text-sky-600' },
+                  { label: 'Total Revenue', value: `₹${stats.revenue.toLocaleString()}`, icon: CreditCard, color: 'text-emerald-600' }
                 ].map((s, i) => (
-                  <div key={i} className="bg-white p-8 border border-slate-200 rounded-md shadow-sm flex items-center justify-between group hover:border-sky-500/30 transition-all">
+                  <div key={i} className="bg-white p-8 border border-slate-200 rounded-sm shadow-sm flex items-center justify-between group hover:border-sky-500/30 transition-all">
                     <div className="space-y-1">
-                       <p className="font-bold text-slate-400 text-xs uppercase tracking-wider">{s.label}</p>
-                       <h3 className={`text-3xl font-black ${s.color} leading-none`}>{s.value}</h3>
+                       <p className="font-black text-slate-400 text-[8px] uppercase tracking-widest">{s.label}</p>
+                       <h3 className={`text-2xl font-black ${s.color} tracking-tighter`}>{s.value}</h3>
                     </div>
-                    <div className="p-4 bg-slate-50 rounded-lg group-hover:bg-sky-50 transition-colors">
-                      <s.icon size={28} className="text-slate-200 group-hover:text-sky-500 transition-colors" />
+                    <div className="p-3 bg-slate-50 rounded-sm group-hover:bg-sky-50 transition-colors">
+                      <s.icon size={22} className="text-slate-200 group-hover:text-sky-500 transition-colors" />
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="bg-white border border-slate-200 rounded-md overflow-hidden shadow-sm">
-                 <div className="px-8 py-5 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-                    <h4 className="font-bold text-slate-600 text-xs uppercase tracking-widest">Live Activity Log</h4>
-                    <RefreshCw size={16} className="text-slate-300 animate-spin-slow cursor-pointer hover:text-slate-500 transition-colors"/>
+              <div className="bg-white border border-slate-200 rounded-sm overflow-hidden shadow-sm">
+                 <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                    <h4 className="font-black text-slate-600 text-[8px] uppercase tracking-widest">Recent Activity Log</h4>
+                    <RefreshCw size={12} className="text-slate-300 animate-spin-slow cursor-pointer hover:text-slate-500 transition-colors"/>
                  </div>
                  <div className="divide-y divide-slate-100">
-                   {orders.slice(-6).reverse().map(o => (
-                     <div key={o.id} className="flex items-center justify-between px-8 py-5 hover:bg-slate-50 transition-colors">
+                   {orders.slice(-5).reverse().map(o => (
+                     <div key={o.id} className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors">
                         <div className="flex items-center gap-4">
-                           <div className="w-10 h-10 bg-slate-100 text-slate-900 flex items-center justify-center rounded-md text-xs font-black border border-slate-200">#{o.id.slice(-3)}</div>
+                           <div className="w-8 h-8 bg-slate-100 text-slate-900 flex items-center justify-center rounded-sm text-[9px] font-black border border-slate-200">#{o.id.slice(-3)}</div>
                            <div className="flex flex-col">
-                              <span className="font-bold text-slate-900 text-base">{o.customerName}</span>
-                              <span className="text-xs font-medium text-slate-400 mt-0.5">{new Date(o.date).toLocaleDateString()}</span>
+                              <span className="font-black text-slate-900 text-xs uppercase tracking-tight">{o.customerName}</span>
+                              <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{new Date(o.date).toLocaleDateString()}</span>
                            </div>
                         </div>
-                        <div className="flex items-center gap-10">
-                           <span className="font-bold text-slate-900 text-lg">₹{o.total.toLocaleString()}</span>
-                           <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full border ${
+                        <div className="flex items-center gap-8">
+                           <span className="font-black text-slate-900 text-sm">₹{o.total.toLocaleString()}</span>
+                           <span className={`text-[7px] font-black uppercase tracking-widest px-2 py-0.5 rounded-sm border ${
                              o.status === 'delivered' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-amber-50 border-amber-100 text-amber-600'
                            }`}>{o.status}</span>
                         </div>
                      </div>
                    ))}
+                   {orders.length === 0 && (
+                     <div className="p-10 text-center text-slate-400 text-[9px] font-black uppercase tracking-widest">Registry Feed Empty</div>
+                   )}
                  </div>
               </div>
             </div>
           )}
 
           {activeTab === 'Products' && (
-            <div className="bg-white border border-slate-200 rounded-md overflow-hidden max-w-7xl overflow-x-auto shadow-sm">
-              <table className="w-full text-left min-w-[800px]">
-                <thead className="bg-slate-50 border-b border-slate-200">
-                  <tr>
-                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Product Name</th>
-                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Category</th>
-                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Stock</th>
-                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Price</th>
-                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {products.map(p => (
-                    <tr key={p.id} className="hover:bg-slate-50/50 group transition-colors">
-                      <td className="px-8 py-5">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-slate-900 text-sm leading-tight">{p.name}</span>
-                          <span className="text-xs font-medium text-slate-400 italic mt-1">{p.scientificName || 'Unlabeled Specimen'}</span>
-                        </div>
-                      </td>
-                      <td className="px-8 py-5">
-                         <span className="text-slate-500 font-bold text-xs bg-slate-100 px-3 py-1 rounded-md border border-slate-200">{p.category}</span>
-                      </td>
-                      <td className="px-8 py-5 font-bold text-sm text-slate-700">{p.stock}</td>
-                      <td className="px-8 py-5 font-bold text-sm text-slate-900">₹{p.price}</td>
-                      <td className="px-8 py-5 text-right">
-                        <div className="flex justify-end gap-3 opacity-30 group-hover:opacity-100 transition-all">
-                          <button onClick={() => { setEditingProduct(p); setProductForm({...p, variations: p.variations || []} as any); setIsProductModalOpen(true); }} className="p-2.5 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-md transition-colors"><Edit2 size={20} /></button>
-                          <button onClick={() => { if(confirm('Permanently delete this item?')) setProducts(products.filter(i=>i.id!==p.id)) }} className="p-2.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"><Trash2 size={20} /></button>
-                        </div>
-                      </td>
+            <div className="bg-white border border-slate-200 rounded-sm overflow-hidden max-w-5xl mx-auto shadow-sm animate-fade-in">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left min-w-[700px]">
+                  <thead className="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                      <th className="px-6 py-4 font-black text-slate-400 text-[8px] uppercase tracking-widest">Specimen</th>
+                      <th className="px-6 py-4 font-black text-slate-400 text-[8px] uppercase tracking-widest">Class</th>
+                      <th className="px-6 py-4 font-black text-slate-400 text-[8px] uppercase tracking-widest">Inventory</th>
+                      <th className="px-6 py-4 font-black text-slate-400 text-[8px] uppercase tracking-widest">Price</th>
+                      <th className="px-6 py-4 font-black text-slate-400 text-[8px] uppercase tracking-widest text-right">Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 text-xs">
+                    {products.map(p => (
+                      <tr key={p.id} className="hover:bg-slate-50/50 group transition-colors">
+                        <td className="px-6 py-4">
+                          <div className="flex flex-col">
+                            <span className="font-black text-slate-900 uppercase tracking-tight">{p.name}</span>
+                            <span className="text-[9px] font-bold text-slate-400 italic mt-0.5 tracking-tight">{p.scientificName || 'Unlabeled'}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                           <span className="text-slate-500 font-black text-[8px] bg-slate-100 px-2 py-0.5 rounded-sm border border-slate-200 uppercase tracking-widest">{p.category}</span>
+                        </td>
+                        <td className="px-6 py-4 font-black text-slate-700">{p.stock} Units</td>
+                        <td className="px-6 py-4 font-black text-slate-900">₹{p.price}</td>
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex justify-end gap-2 opacity-20 group-hover:opacity-100 transition-all">
+                            <button onClick={() => { setEditingProduct(p); setProductForm({...p, variations: p.variations || []} as any); setIsProductModalOpen(true); }} className="p-2 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-sm transition-colors"><Edit2 size={16} /></button>
+                            <button onClick={() => deleteProduct(p.id)} className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-sm transition-colors"><Trash2 size={16} /></button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
 
           {activeTab === 'Orders' && (
-            <div className="bg-white border border-slate-200 rounded-md overflow-hidden max-w-7xl overflow-x-auto shadow-sm">
-              <table className="w-full text-left min-w-[700px]">
-                <thead className="bg-slate-50 border-b border-slate-200">
-                  <tr>
-                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Order ID</th>
-                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Customer Name</th>
-                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider">Total Amount</th>
-                    <th className="px-8 py-5 font-bold text-slate-500 text-xs uppercase tracking-wider text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {orders.slice().reverse().map(o => (
-                    <tr key={o.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-8 py-5 font-bold text-sky-600 text-sm">#{o.id}</td>
-                      <td className="px-8 py-5 font-bold text-slate-900 text-sm">{o.customerName}</td>
-                      <td className="px-8 py-5 font-bold text-slate-900 text-sm">₹{o.total.toLocaleString()}</td>
-                      <td className="px-8 py-5 text-right">
-                        <div className="flex justify-end gap-3">
-                          <button onClick={() => navigate(`/invoice/${o.id}`, { state: { orderData: o } })} className="p-3 bg-slate-100 text-slate-600 rounded-md hover:bg-slate-900 hover:text-white transition-all"><FileText size={20}/></button>
-                          <button onClick={() => { if(confirm('Remove this order record?')) setOrders(orders.filter(ord=>ord.id!==o.id)) }} className="p-3 text-slate-400 hover:text-red-600 transition-all"><Trash2 size={20}/></button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {activeTab === 'Invoices' && (
-            <div className="max-w-4xl space-y-8 mx-auto">
-               <form onSubmit={generateManualInvoice} className="space-y-8">
-                <div className="bg-white border border-slate-200 p-10 rounded-md shadow-sm">
-                  <div className="flex items-center gap-3 mb-8 border-b border-slate-100 pb-4">
-                    <UserCheck size={24} className="text-sky-600" />
-                    <h3 className="font-extrabold text-slate-900 text-sm uppercase tracking-wider">Customer Details</h3>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase">First Name</label>
-                        <input required placeholder="First Name" className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md outline-none focus:border-slate-900 transition-all text-sm" value={invoiceForm.firstName} onChange={e => setInvoiceForm({...invoiceForm, firstName: e.target.value})} />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[10px] font-bold text-slate-400 uppercase">Last Name</label>
-                        <input required placeholder="Last Name" className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md outline-none focus:border-slate-900 transition-all text-sm" value={invoiceForm.lastName} onChange={e => setInvoiceForm({...invoiceForm, lastName: e.target.value})} />
-                      </div>
-                    </div>
-                    <div className="space-y-1.5">
-                       <label className="text-[10px] font-bold text-slate-400 uppercase">Mobile Number</label>
-                       <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 px-5 py-4 rounded-md focus-within:border-slate-900 transition-all">
-                          <Phone size={18} className="text-slate-300"/>
-                          <input required type="tel" className="w-full bg-transparent font-bold outline-none text-sm" placeholder="Phone Number" value={invoiceForm.phone} onChange={e => setInvoiceForm({...invoiceForm, phone: e.target.value})} />
-                       </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white border border-slate-200 p-10 rounded-md shadow-sm">
-                  <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
-                    <div className="flex items-center gap-3">
-                      <ClipboardList size={24} className="text-sky-600" />
-                      <h3 className="font-extrabold text-slate-900 text-sm uppercase tracking-wider">Order Items</h3>
-                    </div>
-                    <button type="button" onClick={() => setInvoiceForm({...invoiceForm, items: [...invoiceForm.items, { id: 'manual-' + Date.now(), name: '', quantity: 1, price: 0, weight: 0 }]})} className="px-6 py-2 border border-sky-100 text-sky-600 bg-sky-50/50 font-bold uppercase text-[10px] tracking-wider rounded-md hover:bg-sky-100 transition-all shadow-sm">+ Add Row</button>
-                  </div>
-                  <div className="space-y-4">
-                    {invoiceForm.items.map((item) => (
-                      <div key={item.id} className="grid grid-cols-12 gap-5 items-center bg-slate-50 p-4 rounded-md border border-slate-100 group">
-                        <div className="col-span-6 md:col-span-5">
-                          <input required placeholder="Item Description" className="w-full bg-white px-4 py-3 border border-slate-200 font-bold rounded-md outline-none focus:border-slate-900 transition-all text-sm" value={item.name} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, name: e.target.value } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
-                        </div>
-                        <div className="col-span-2 md:col-span-1">
-                          <input required type="number" placeholder="Qty" className="w-full bg-white px-2 py-3 border border-slate-200 font-bold rounded-md text-center text-sm" value={item.quantity} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, quantity: parseInt(e.target.value)||1 } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
-                        </div>
-                        <div className="col-span-2 md:col-span-2">
-                          <input required type="number" placeholder="Price" className="w-full bg-white px-3 py-3 border border-slate-200 font-bold rounded-md text-center text-sm" value={item.price} onChange={e => { const updated = invoiceForm.items.map(i => i.id === item.id ? { ...i, price: parseInt(e.target.value)||0 } : i); setInvoiceForm({...invoiceForm, items: updated}); }} />
-                        </div>
-                        <div className="col-span-1 flex justify-end opacity-0 group-hover:opacity-100 transition-all">
-                          <button type="button" onClick={() => { if(invoiceForm.items.length > 1) setInvoiceForm({...invoiceForm, items: invoiceForm.items.filter(i=>i.id!==item.id)}) }} className="p-2 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={20}/></button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <button type="submit" className="w-full mt-12 py-5 bg-slate-900 text-white font-black uppercase tracking-[0.3em] rounded-md hover:bg-sky-600 transition-all flex items-center justify-center gap-3 shadow-xl text-sm">
-                     <Printer size={20} />
-                     Generate and Print Invoice
-                  </button>
-                </div>
-               </form>
-            </div>
+             <div className="bg-white border border-slate-200 rounded-sm overflow-hidden max-w-5xl mx-auto shadow-sm animate-fade-in">
+               <div className="overflow-x-auto">
+                 <table className="w-full text-left min-w-[700px]">
+                   <thead className="bg-slate-50 border-b border-slate-200">
+                     <tr>
+                       <th className="px-6 py-4 font-black text-slate-400 text-[8px] uppercase tracking-widest">Order ID</th>
+                       <th className="px-6 py-4 font-black text-slate-400 text-[8px] uppercase tracking-widest">Customer Name</th>
+                       <th className="px-6 py-4 font-black text-slate-400 text-[8px] uppercase tracking-widest">Total Amount</th>
+                       <th className="px-6 py-4 font-black text-slate-400 text-[8px] uppercase tracking-widest text-right">Actions</th>
+                     </tr>
+                   </thead>
+                   <tbody className="divide-y divide-slate-100 text-xs">
+                     {orders.slice().reverse().map(o => (
+                       <tr key={o.id} className="hover:bg-slate-50 transition-colors">
+                         <td className="px-6 py-4 font-black text-sky-600">#{o.id}</td>
+                         <td className="px-6 py-4 font-black text-slate-900 uppercase tracking-tight">{o.customerName}</td>
+                         <td className="px-6 py-4 font-black text-slate-900">₹{o.total.toLocaleString()}</td>
+                         <td className="px-6 py-4 text-right">
+                           <div className="flex justify-end gap-2">
+                             <button onClick={() => navigate(`/invoice/${o.id}`, { state: { orderData: o } })} className="p-2.5 bg-slate-100 text-slate-600 rounded-sm hover:bg-slate-900 hover:text-white transition-all"><FileText size={16}/></button>
+                             <button onClick={() => { if(confirm('Erase this record?')) setOrders(orders.filter(ord=>ord.id!==o.id)) }} className="p-2.5 text-slate-300 hover:text-red-600 transition-all"><Trash2 size={16}/></button>
+                           </div>
+                         </td>
+                       </tr>
+                     ))}
+                   </tbody>
+                 </table>
+               </div>
+             </div>
           )}
         </div>
       </main>
 
       {/* Product Management Modal */}
       {isProductModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-white w-full max-w-2xl p-10 relative rounded-lg animate-fade-in shadow-2xl border border-slate-200">
-            <button onClick={() => setIsProductModalOpen(false)} className="absolute top-8 right-8 text-slate-400 hover:text-slate-900 transition-colors"><X size={28} /></button>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white w-full max-w-2xl p-10 relative rounded-sm animate-fade-in shadow-2xl border border-white/10">
+            <button onClick={() => setIsProductModalOpen(false)} className="absolute top-8 right-8 text-slate-400 hover:text-slate-900 transition-colors"><X size={24} /></button>
             
             <div className="mb-10 flex items-center gap-4">
-               <div className="p-3 bg-sky-50 rounded-lg"><Layers size={28} className="text-sky-600" /></div>
+               <div className="p-3.5 bg-sky-50 rounded-sm text-sky-600 shadow-inner"><Layers size={20} /></div>
                <div>
-                  <h2 className="text-2xl font-black text-slate-900">
-                    {editingProduct ? 'Edit Specimen' : 'Add New Specimen'}
+                  <h2 className="text-xl font-black text-slate-900 uppercase tracking-tighter leading-none">
+                    {editingProduct ? 'Modify Specimen' : 'Add New Specimen'}
                   </h2>
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Global Inventory Registry</p>
+                  <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.3em] mt-1.5">Registry Global Distribution System</p>
                </div>
             </div>
             
@@ -392,45 +316,45 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-5">
                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase">Product Name *</label>
-                      <input required placeholder="e.g., Premium Halfmoon Betta" className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md outline-none focus:border-slate-900 transition-all text-sm" value={productForm.name} onChange={e => setProductForm({...productForm, name: e.target.value})} />
+                      <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Product Name *</label>
+                      <input required placeholder="Premium Halfmoon" className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-black rounded-sm outline-none focus:border-slate-900 transition-all text-xs uppercase" value={productForm.name} onChange={e => setProductForm({...productForm, name: e.target.value})} />
                    </div>
                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase">Scientific Name</label>
-                      <input placeholder="e.g., Betta splendens" className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md outline-none focus:border-slate-900 transition-all italic text-sm" value={productForm.scientificName} onChange={e => setProductForm({...productForm, scientificName: e.target.value})} />
+                      <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Scientific Nomenclature</label>
+                      <input placeholder="Betta splendens" className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-bold rounded-sm outline-none focus:border-slate-900 transition-all italic text-xs" value={productForm.scientificName} onChange={e => setProductForm({...productForm, scientificName: e.target.value})} />
                    </div>
                    <div className="grid grid-cols-2 gap-5">
                       <div className="space-y-1.5">
-                         <label className="text-[10px] font-bold text-slate-400 uppercase">Category</label>
-                         <select className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-bold rounded-md text-xs" value={productForm.category} onChange={e => setProductForm({...productForm, category: e.target.value})}>
+                         <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Class</label>
+                         <select className="w-full bg-slate-50 border border-slate-200 px-3 py-3 font-black rounded-sm text-[9px] uppercase tracking-widest" value={productForm.category} onChange={e => setProductForm({...productForm, category: e.target.value})}>
                             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                          </select>
                       </div>
                       <div className="space-y-1.5">
-                         <label className="text-[10px] font-bold text-slate-400 uppercase">Stock Count *</label>
-                         <input type="number" required className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md text-sm" value={productForm.stock} onChange={e => setProductForm({...productForm, stock: parseInt(e.target.value)||0})} />
+                         <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Stock *</label>
+                         <input type="number" required className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-black rounded-sm text-xs" value={productForm.stock} onChange={e => setProductForm({...productForm, stock: parseInt(e.target.value)||0})} />
                       </div>
                    </div>
                 </div>
 
                 <div className="space-y-5">
                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase">Price (₹) *</label>
-                      <input type="number" required className="w-full bg-white border border-sky-100 px-5 py-4 font-black text-sky-600 rounded-md outline-none text-base" value={productForm.price} onChange={e => setProductForm({...productForm, price: parseInt(e.target.value)||0})} />
+                      <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Unit Price (₹) *</label>
+                      <input type="number" required className="w-full bg-white border border-sky-100 px-4 py-3.5 font-black text-sky-600 rounded-sm outline-none text-base tracking-tighter" value={productForm.price} onChange={e => setProductForm({...productForm, price: parseInt(e.target.value)||0})} />
                    </div>
                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase">Weight per Unit (kg) *</label>
-                      <input type="number" step="0.01" required className="w-full bg-slate-50 border border-slate-200 px-5 py-4 font-bold rounded-md text-sm" value={productForm.weight} onChange={e => setProductForm({...productForm, weight: parseFloat(e.target.value)||0})} />
+                      <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Net Mass (kg) *</label>
+                      <input type="number" step="0.01" required className="w-full bg-slate-50 border border-slate-200 px-4 py-3 font-black rounded-sm text-xs" value={productForm.weight} onChange={e => setProductForm({...productForm, weight: parseFloat(e.target.value)||0})} />
                    </div>
                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase">Product Image</label>
+                      <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Visual Asset (Photo)</label>
                       <div className="flex gap-4">
-                         <button type="button" onClick={() => fileInputRef.current?.click()} className="flex-grow py-4 px-5 bg-slate-900 text-white font-bold rounded-md hover:bg-sky-600 transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-widest">
-                            <ImageIcon size={18}/>
-                            {productForm.image ? 'Change Photo' : 'Upload Photo'}
+                         <button type="button" onClick={() => fileInputRef.current?.click()} className="flex-grow py-3 px-4 bg-slate-900 text-white font-black rounded-sm hover:bg-sky-600 transition-all flex items-center justify-center gap-2 text-[8px] uppercase tracking-[0.2em]">
+                            <ImageIcon size={14}/>
+                            {productForm.image ? 'Modify Visual' : 'Upload Asset'}
                          </button>
                          {productForm.image && (
-                           <div className="w-16 h-16 bg-slate-50 rounded-md border border-slate-200 overflow-hidden shrink-0 shadow-sm"><img src={productForm.image} className="w-full h-full object-cover" /></div>
+                           <div className="w-12 h-12 bg-slate-50 rounded-sm border border-slate-200 overflow-hidden shrink-0 shadow-sm"><img src={productForm.image} className="w-full h-full object-cover" /></div>
                          )}
                       </div>
                       <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={e => {
@@ -445,13 +369,19 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ products, setProducts }
                 </div>
               </div>
 
-              <button 
-                type="submit" 
-                disabled={isSaving}
-                className="w-full py-5 bg-sky-600 text-white font-black uppercase tracking-[0.2em] rounded-md hover:bg-sky-700 transition-all shadow-2xl active:scale-[0.98] text-sm mt-4 disabled:opacity-50"
-              >
-                {isSaving ? 'Synchronizing Cloud...' : editingProduct ? 'Save and Sync Changes' : 'Confirm and Publish Globally'}
-              </button>
+              <div className="pt-6 border-t border-slate-100">
+                <button 
+                  type="submit" 
+                  disabled={isSaving}
+                  className="w-full py-4 bg-sky-600 text-white font-black uppercase tracking-[0.3em] rounded-sm hover:bg-sky-700 transition-all shadow-xl active:scale-[0.98] text-[9px] disabled:opacity-50"
+                >
+                  {isSaving ? (
+                    <span className="flex items-center justify-center gap-3"><RefreshCw className="animate-spin" size={14} /> Global Sync in Progress...</span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-3"><Save size={14} /> Confirm and Broadcast Changes</span>
+                  )}
+                </button>
+              </div>
             </form>
           </div>
         </div>
